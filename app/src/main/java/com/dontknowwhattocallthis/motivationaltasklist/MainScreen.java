@@ -16,11 +16,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
     ArrayList<HashMap<String,String>> taskData;
-
+    SimpleAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +34,11 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO: add tasks with this action
+                addNewTask();
+                /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                        */
             }
         });
         //add listeners
@@ -52,13 +56,32 @@ public class MainScreen extends AppCompatActivity {
         }
         ListView listView = (ListView) findViewById(R.id.list_tasks);
         //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
-        SimpleAdapter adapter = new SimpleAdapter(this,taskData,R.layout.task_item,new String[]{"task","date"}, new int[]{R.id.task_item_task_desc,R.id.task_item_task_date});
+        adapter = new SimpleAdapter(this,taskData,R.layout.task_item,new String[]{"task","date"}, new int[]{R.id.task_item_task_desc,R.id.task_item_task_date});
         listView.setAdapter(adapter);
     }
     public void onTaskChecked(View v){
+        ListView lv = (ListView) this.findViewById(R.id.list_tasks);
         if(((CheckBox) v).isChecked()){
-            Toast.makeText(MainScreen.this, "Task checked!", Toast.LENGTH_LONG).show();
+            // TODO: Appropriately update task list
+            int pos = lv.getPositionForView(v);
+            Toast.makeText(MainScreen.this, "Task checked!" + pos, Toast.LENGTH_SHORT).show();
+            taskData.remove(pos);
+            adapter.notifyDataSetChanged();
+            // warning: hack that functionally works but looks terrible
+            ((CheckBox) v).setChecked(false);
+            //lv.invalidateViews();
+
         }
+    }
+    public void addNewTask(){
+        //TODO: Replace with TaskItem object
+        String taskName = "Test";
+        String taskDate = "jsdflkj";
+        HashMap<String,String> newTask = new HashMap<String, String>(2);
+        newTask.put("task",taskName); newTask.put("date",taskDate);
+        taskData.add(newTask);
+        adapter.notifyDataSetChanged();
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
