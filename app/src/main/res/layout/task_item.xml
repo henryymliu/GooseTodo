@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<CheckBox
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/taskCheckBox"
+    android:onClick="onTaskChecked"
+   />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id = "@+id/task_item_task_desc"
+    android:textAppearance="?android:textAppearanceLarge"
+    android:text = "TEST"
+    android:layout_alignParentTop="true"
+    android:layout_toRightOf="@id/taskCheckBox" />
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id = "@+id/task_item_task_date"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:text = "TEST"
+    android:layout_below="@id/task_item_task_desc"
+    android:layout_toRightOf="@id/taskCheckBox" />
+
+
+
+</RelativeLayout>
