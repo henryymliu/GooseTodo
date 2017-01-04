@@ -93,7 +93,7 @@ public class MainScreen extends AppCompatActivity {
         //create text field
         final EditText titleInput = new EditText(this);
         titleInput.setInputType(InputType.TYPE_CLASS_TEXT);
-
+        titleInput.setHint("Feed the cat");
         //set view in dialog box
         getTaskTitleBuilder.setView(titleInput);
         getTaskTitleBuilder.setPositiveButton("Select date", new DialogInterface.OnClickListener(){
@@ -123,6 +123,7 @@ public class MainScreen extends AppCompatActivity {
 
     //Launches datepicker dialog to select task date
     public void setTaskDate(){
+        //initialize calendar to current date
         Calendar currCal = Calendar.getInstance();
         int cYear = currCal.get(Calendar.YEAR);
         int cMonth = currCal.get(Calendar.MONTH);
@@ -136,6 +137,21 @@ public class MainScreen extends AppCompatActivity {
 
             }
         });
+        dpDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+            }
+        });
+        dpDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO: Collect date from picker
+
+            }
+        });
+        dpDialog.show();
     }
 
     public void updateData(){
