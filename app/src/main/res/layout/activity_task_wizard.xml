@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/activity_task_wizard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dontknowwhattocallthis.motivationaltasklist.TaskWizard">
+<EditText
+    android:id = "@+id/createTaskTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:hint = "e.g. Feed the cat"/>
+
+
+
+<CheckBox
+    android:text="Select due date?"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/useDate" />
+
+<DatePicker
+    android:id = "@+id/taskDatePicker"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+</DatePicker>
+
+<CheckBox
+android:text="Select due time?"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/useTime" />
+
+<Button
+    android:id = "@+id/createTask"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text= "Create"/>
+</LinearLayout>
