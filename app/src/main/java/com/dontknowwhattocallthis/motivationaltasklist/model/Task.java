@@ -5,5 +5,4 @@ package com.dontknowwhattocallthis.motivationaltasklist.model;
  */
 
 public class Task {
-    public getName
 }
