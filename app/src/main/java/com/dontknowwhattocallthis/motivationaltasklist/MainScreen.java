@@ -1,6 +1,7 @@
 package com.dontknowwhattocallthis.motivationaltasklist;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -28,9 +30,10 @@ import java.util.Map;
 public class MainScreen extends AppCompatActivity {
     ArrayList<HashMap<String,String>> taskData;
     SimpleAdapter adapter;
+    Context ctx = this;
     private String taskName = "";
     private String taskDate = "sdff";
-
+    public static final String dateFormat = "yyyy.MM.dd";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +46,8 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO: add tasks with this action
-                addNewTask();
+                taskAdder tA = new taskAdder(ctx,taskData,adapter);
+                tA.addNewTask();
                 /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -82,84 +86,15 @@ public class MainScreen extends AppCompatActivity {
 
         }
     }
-    public void addNewTask(){
-        //TODO: Replace with TaskItem object
-       // final String taskName;
-        //String taskDate = "jsdflkj";
 
-        AlertDialog.Builder getTaskTitleBuilder = new AlertDialog.Builder(this);
-        getTaskTitleBuilder.setTitle("Create new task");
-
-        //create text field
-        final EditText titleInput = new EditText(this);
-        titleInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        titleInput.setHint("Feed the cat");
-        //set view in dialog box
-        getTaskTitleBuilder.setView(titleInput);
-        getTaskTitleBuilder.setPositiveButton("Select date", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int id){
-                taskName = titleInput.getText().toString();
-                setTaskDate();
-                dialog.dismiss();
-            }
-        });
-        getTaskTitleBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int id){
-                dialog.cancel();
-            }
-        });
-        getTaskTitleBuilder.setNeutralButton("Create", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int id){
-                taskName = titleInput.getText().toString();
-                updateData();
-                dialog.dismiss();
-            }
-        });
-        getTaskTitleBuilder.show();
-    }
-
-    //Launches datepicker dialog to select task date
-    public void setTaskDate(){
-        //initialize calendar to current date
-        Calendar currCal = Calendar.getInstance();
-        int cYear = currCal.get(Calendar.YEAR);
-        int cMonth = currCal.get(Calendar.MONTH);
-        int cDay = currCal.get(Calendar.DAY_OF_WEEK);
-
-        DatePickerDialog dpDialog = new DatePickerDialog(this,null,cYear,cMonth,cDay);
-        dpDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Select time", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO: Collect date from picker
-
-            }
-        });
-        dpDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-
-            }
-        });
-        dpDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO: Collect date from picker
-
-            }
-        });
-        dpDialog.show();
-    }
-
+    /*
     public void updateData(){
         HashMap<String,String> newTask = new HashMap<String, String>(2);
         newTask.put("task",taskName); newTask.put("date",taskDate);
         taskData.add(newTask);
         adapter.notifyDataSetChanged();
     }
+    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

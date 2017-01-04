@@ -19,12 +19,7 @@ public class TaskItem {
     private boolean usedate;
     private boolean usetime;
 
-    public TaskItem(String title, long duetime, boolean usedate, boolean usetime){
-        this.title = title;
-        this.duedate = new Date(duetime);
-        this.usedate = usedate;
-        this.usetime = usetime;
-    }
+    public TaskItem(){}
 
     public TaskItem(Cursor cursor){
         this.title = cursor.getString(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE));
@@ -42,4 +37,16 @@ public class TaskItem {
         return this.duedate;
     }
 
+    public void setName(String newTitle){
+        this.title = newTitle;
+    }
+    public void setDate(Date newDate){
+        this.duedate = newDate;
+    }
+    public void setUseDate(boolean d){
+        this.usedate = d;
+    }
+    public void setUseTime(boolean t){
+        this.usetime =t;
+    }
 }
