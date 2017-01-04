@@ -2,6 +2,7 @@ package com.dontknowwhattocallthis.motivationaltasklist.persistence;
 
 /**
  * Created by Cheng on 03/01/2017.
+ * TaskDBHelper raps SQLiteOpenHelper and should be used to make read and write
  */
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -15,7 +16,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TaskDBSchema.TaskTable.TABLE_NAME + " (" +
                     TaskDBSchema.TaskTable._ID + " INTEGER PRIMARY KEY," +
-                    TaskDBSchema.TaskTable.COLUMN_NAME_NAME + " TEXT," +
+                    TaskDBSchema.TaskTable.COLUMN_NAME_TITLE + " TEXT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP + " BIGINT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE + " BIT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME + " BIT" + ")";
@@ -26,14 +27,20 @@ public class TaskDBHelper extends SQLiteOpenHelper{
     public TaskDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
     }
+
+    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // For now delete everything. Migrations need to be implemented.
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
+
+    @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
