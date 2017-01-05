@@ -18,10 +18,16 @@ public class TaskItem {
     private Date duedate;
     private boolean usedate;
     private boolean usetime;
+    private long id;
 
     public TaskItem(){}
 
+    public TaskItem(){
+
+    }
+
     public TaskItem(Cursor cursor){
+        this.id = cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable._ID));
         this.title = cursor.getString(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE));
         this.duedate = new Date(cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP)));
         // Because Cursor doesn't support getBoolean for some reason
@@ -52,4 +58,7 @@ public class TaskItem {
         this.usetime =t;
     }
 
+    public long getID() {
+        return id;
+    }
 }

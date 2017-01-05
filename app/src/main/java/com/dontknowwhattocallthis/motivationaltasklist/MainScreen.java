@@ -12,9 +12,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
+import com.woxthebox.draglistview.DragItemAdapter;
+import com.woxthebox.draglistview.DragListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
-    ArrayList<HashMap<String,String>> taskData;
+    ArrayList<Pair<,String>> taskData;
     SimpleAdapter adapter;
     Context ctx = this;
+    private DragListView mDragListView;
     private String taskName = "";
     private String taskDate = "sdff";
     public static final String dateFormat = "yyyy.MM.dd";
@@ -49,8 +53,7 @@ public class MainScreen extends AppCompatActivity {
             }
         });
         //add listeners
-
-
+        
         //create test data //TODO: change dataset
         String[] testData = {"Feed tiger: Done", "Study", "Buy shrubberies"};
         String[] testDataDates = {"Today, 7:00 PM","","January 13"};
@@ -61,14 +64,28 @@ public class MainScreen extends AppCompatActivity {
             temp.put("date",testDataDates[i]);
             taskData.add(temp);
         }
-        ListView listView = (ListView) findViewById(R.id.list_tasks);
+        mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
+        mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
+        mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
+            @Override
+            public void onItemDragStarted(int position) {
+                Toast.makeText(mDragListView.getContext(), "Start - position: " + position, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemDragEnded(int fromPosition, int toPosition) {
+                if (fromPosition != toPosition) {
+                    Toast.makeText(mDragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
         //TODO: Change adapter
-        adapter = new SimpleAdapter(this,taskData,R.layout.task_item,new String[]{"task","date"}, new int[]{R.id.task_item_task_desc,R.id.task_item_task_date});
-        listView.setAdapter(adapter);
+        adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.layout.task_item, false);
+        mDragListView.setAdapter();
     }
     public void onTaskChecked(View v){
-        ListView lv = (ListView) this.findViewById(R.id.list_tasks);
+        DragListView lv = (DragListView) this.findViewById(R.id.list_tasks);
         if(((CheckBox) v).isChecked()){
             // TODO: Appropriately update task list
             int pos = lv.getPositionForView(v);
