@@ -1,13 +1,10 @@
 package com.dontknowwhattocallthis.motivationaltasklist;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -15,14 +12,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +39,7 @@ public class MainScreen extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: add tasks with this action
+
                 taskAdder tA = new taskAdder(ctx,taskData,adapter);
                 tA.addNewTask();
                 /*
@@ -57,7 +51,7 @@ public class MainScreen extends AppCompatActivity {
         //add listeners
 
 
-        //create test data
+        //create test data //TODO: change dataset
         String[] testData = {"Feed tiger: Done", "Study", "Buy shrubberies"};
         String[] testDataDates = {"Today, 7:00 PM","","January 13"};
         taskData = new ArrayList<HashMap<String,String>>();
@@ -69,6 +63,7 @@ public class MainScreen extends AppCompatActivity {
         }
         ListView listView = (ListView) findViewById(R.id.list_tasks);
         //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
+        //TODO: Change adapter
         adapter = new SimpleAdapter(this,taskData,R.layout.task_item,new String[]{"task","date"}, new int[]{R.id.task_item_task_desc,R.id.task_item_task_date});
         listView.setAdapter(adapter);
     }

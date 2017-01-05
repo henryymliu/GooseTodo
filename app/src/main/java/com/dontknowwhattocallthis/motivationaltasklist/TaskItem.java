@@ -36,6 +36,8 @@ public class TaskItem {
     public Date getDueDate(){
         return this.duedate;
     }
+    public boolean  hasDate(){return this.usedate;}
+    public boolean hasTime(){return this.usetime;}
 
     public void setName(String newTitle){
         this.title = newTitle;
@@ -49,4 +51,5 @@ public class TaskItem {
     public void setUseTime(boolean t){
         this.usetime =t;
     }
+
 }
