@@ -14,10 +14,11 @@ import java.util.GregorianCalendar;
 
 public class TaskItem {
     private String title;
-    //private Calendar taskDueDate;
+    private Date currDate;
     private Date duedate;
     private boolean usedate;
     private boolean usetime;
+    private boolean isOverdue = false;
 
     public TaskItem(){}
 
@@ -27,8 +28,17 @@ public class TaskItem {
         // Because Cursor doesn't support getBoolean for some reason
         this.usedate = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME))==1;
         this.usetime = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE))==1;
-    }
+        this.currDate = Calendar.getInstance().getTime();
+        if(usedate) {
+            assert(duedate != null);
+            //check if task overdue
+            if(this.currDate.compareTo(this.duedate) > 0){
+                this.isOverdue = true; //TODO:  Change text color to red
+            }
+        }
 
+    }
+    //bunch o' getters n' setters
     public String getTitle(){
         return this.title;
     }
@@ -38,7 +48,7 @@ public class TaskItem {
     }
     public boolean  hasDate(){return this.usedate;}
     public boolean hasTime(){return this.usetime;}
-
+    public boolean isOverdue(){return this.isOverdue;}
     public void setName(String newTitle){
         this.title = newTitle;
     }
