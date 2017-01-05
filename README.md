@@ -1,8 +1,11 @@
 # MotivationalTaskList
-My first crack at a Material Design Android application. Currently WIP, working on these features:
+A first crack at a Material Design Android application. Currently WIP, working on these features:
 
-- User-created tasks with due dates; user-defined order and priority/tags
+- User-defined order and priority/tags
 
+Possible features in the future:
+- Custom user theme
+- Animations
 - Google Calendar integration
 - Voice, image memo
 - Long-term goal of adding some 'assistant' (similar to MS Word 2003's paperclip) as a companion, 
