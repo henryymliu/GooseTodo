@@ -52,7 +52,7 @@ public class MainScreen extends AppCompatActivity {
 
 
         //create test data //TODO: change dataset
-        String[] testData = {"Feed tiger: Done", "Study", "Buy shrubberies"};
+        String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
         String[] testDataDates = {"Today, 7:00 PM","","January 13"};
         taskData = new ArrayList<HashMap<String,String>>();
         for(int i = 0;i < 3;i++){
@@ -62,7 +62,6 @@ public class MainScreen extends AppCompatActivity {
             taskData.add(temp);
         }
         ListView listView = (ListView) findViewById(R.id.list_tasks);
-        //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
         //TODO: Change adapter
         adapter = new SimpleAdapter(this,taskData,R.layout.task_item,new String[]{"task","date"}, new int[]{R.id.task_item_task_desc,R.id.task_item_task_date});
         listView.setAdapter(adapter);
@@ -72,7 +71,13 @@ public class MainScreen extends AppCompatActivity {
         if(((CheckBox) v).isChecked()){
             // TODO: Appropriately update task list
             int pos = lv.getPositionForView(v);
-            Toast.makeText(MainScreen.this, "Task checked!" + pos, Toast.LENGTH_SHORT).show();
+            Snackbar.make(v, "Task completed!", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TODO: Implement undo item field
+                        }
+                    }).show();
             taskData.remove(pos);
             adapter.notifyDataSetChanged();
             // warning: hack that functionally works but looks terrible
