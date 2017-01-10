@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
 
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,12 +28,12 @@ public class taskAdder {
     private final TaskItem task = new TaskItem();
     private Context ctx;
     //TODO: change following two lines
-    private ArrayList<HashMap<String,String>> taskData;
-    private SimpleAdapter adapter;
+    private ArrayList<TaskItem> taskData;
+    private TaskItemCursorAdapter adapter;
 
     private Calendar currCal = Calendar.getInstance();
 
-    public taskAdder(Context ctx, ArrayList<HashMap<String,String>> taskData, SimpleAdapter adapter){
+    public taskAdder(Context ctx, ArrayList<TaskItem> taskData, TaskItemCursorAdapter adapter){
         this.ctx = ctx;
         this.taskData = taskData;
         this.adapter = adapter;
@@ -145,6 +147,7 @@ public class taskAdder {
         tpDialog.show();
     }
     private void updateData() {
+        /*
         HashMap<String, String> newTask = new HashMap<String, String>(2);//TODO: change this dataset
         newTask.put("task", task.getTitle());
 
@@ -163,9 +166,9 @@ public class taskAdder {
         else { //task name only
             newTask.put("date", "");
         }
-
+        */
         //TODO: change these two lines
-        taskData.add(newTask);
+        taskData.add(task);
         adapter.notifyDataSetChanged();
     }
 

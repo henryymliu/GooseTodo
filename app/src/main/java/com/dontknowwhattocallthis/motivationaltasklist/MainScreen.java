@@ -25,13 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
-    ArrayList<Pair<,String>> taskData;
-    SimpleAdapter adapter;
+    ArrayList<TaskItem> taskData;
+    TaskItemCursorAdapter adapter;
     Context ctx = this;
     private DragListView mDragListView;
-    private String taskName = "";
-    private String taskDate = "sdff";
-    public static final String dateFormat = "yyyy.MM.dd";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,13 +53,14 @@ public class MainScreen extends AppCompatActivity {
         //add listeners
         
         //create test data //TODO: change dataset
-        String[] testData = {"Feed tiger: Done", "Study", "Buy shrubberies"};
-        String[] testDataDates = {"Today, 7:00 PM","","January 13"};
-        taskData = new ArrayList<HashMap<String,String>>();
-        for(int i = 0;i < 3;i++){
-            HashMap<String,String> temp = new HashMap<String,String>(2);
-            temp.put("task",testData[i]);
-            temp.put("date",testDataDates[i]);
+        String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
+        Long[] testDataDates = {1484087306912L,1484087306912L,1484089306912L};
+        Boolean[] testDataDateBool = {false, true, true};
+        Boolean[] testDataTimeBool = {false, false, true};
+
+        taskData = new ArrayList<TaskItem>();
+        for(int i = 0;i < testData.length;i++){
+            TaskItem temp = new TaskItem(testData[i],testDataDates[i],testDataDateBool[i],testDataTimeBool[i]);
             taskData.add(temp);
         }
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
@@ -80,13 +79,13 @@ public class MainScreen extends AppCompatActivity {
             }
         });
         //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
-        //TODO: Change adapter
         adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.layout.task_item, false);
-        mDragListView.setAdapter();
+        mDragListView.setAdapter(adapter,false);
     }
     public void onTaskChecked(View v){
         DragListView lv = (DragListView) this.findViewById(R.id.list_tasks);
         if(((CheckBox) v).isChecked()){
+            /*
             // TODO: Appropriately update task list
             int pos = lv.getPositionForView(v);
             Toast.makeText(MainScreen.this, "Task checked!" + pos, Toast.LENGTH_SHORT).show();
@@ -95,7 +94,7 @@ public class MainScreen extends AppCompatActivity {
             // warning: hack that functionally works but looks terrible
             ((CheckBox) v).setChecked(false);
             //lv.invalidateViews();
-
+            */
         }
     }
 
