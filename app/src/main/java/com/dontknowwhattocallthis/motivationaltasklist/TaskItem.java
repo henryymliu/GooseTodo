@@ -22,10 +22,12 @@ public class TaskItem {
 
     public TaskItem(){}
 
-    public TaskItem(){
-
+    public TaskItem(String name, Long millis, boolean ud, boolean ut){
+        this.title = name;
+        this.duedate = new Date(millis);
+        this.usedate = ud;
+        this.usetime = ut;
     }
-
     public TaskItem(Cursor cursor){
         this.id = cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable._ID));
         this.title = cursor.getString(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE));
