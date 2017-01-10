@@ -65,7 +65,7 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
-            mText = (TextView) itemView.findViewById(R.id.text);
+            mText = (TextView) itemView.findViewById(R.id.task_item_task_desc);
         }
 
         @Override
