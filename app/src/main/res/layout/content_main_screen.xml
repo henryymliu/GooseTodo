@@ -13,7 +13,7 @@
     tools:context="com.dontknowwhattocallthis.motivationaltasklist.MainScreen"
     tools:showIn="@layout/activity_main_screen">
 
-    <DragListView
+    <com.woxthebox.draglistview.DragListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id = "@+id/list_tasks" />
