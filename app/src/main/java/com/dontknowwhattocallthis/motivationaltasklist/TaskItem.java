@@ -63,4 +63,7 @@ public class TaskItem {
     public long getID() {
         return id;
     }
+    public void setID(long ID) {
+        this.id = ID;
+    }
 }

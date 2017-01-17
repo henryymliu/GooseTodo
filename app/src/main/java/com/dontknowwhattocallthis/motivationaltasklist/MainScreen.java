@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,7 @@ public class MainScreen extends AppCompatActivity {
     //TaskItemCursorAdapter adapter;
     Context ctx = this;
     private DragListView mDragListView;
+    private MySwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +69,29 @@ public class MainScreen extends AppCompatActivity {
         taskData = new ArrayList<TaskItem>();
         for(int i = 0;i < testData.length;i++){
             TaskItem temp = new TaskItem(testData[i],testDataDates[i],testDataDateBool[i],testDataTimeBool[i]);
+            temp.setID(i);
             taskData.add(temp);
         }
+
+        mRefreshLayout = (MySwipeRefreshLayout) this.findViewById(R.id.swipe_refresh_layout);
+
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
-        mDragListView.setLayoutManager(new LinearLayoutManager(mDragListView.getContext()));
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
+
+        mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
+        //mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.app_color));
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
+        /*
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
             public void onItemDragStarted(int position) {
@@ -84,12 +104,13 @@ public class MainScreen extends AppCompatActivity {
                     Toast.makeText(mDragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
+        mDragListView.setLayoutManager(new LinearLayoutManager(this));
         //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
-        TaskItemCursorAdapter adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.task_item_task_date, false);
-        mDragListView.setCanDragHorizontally(false);
-        mDragListView.setAdapter(adapter,false);
-        mDragListView.setCustomDragItem(new MyDragItem(this, R.layout.task_item));
+        TaskItemCursorAdapter adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.item_layout, true);
+        mDragListView.setAdapter(adapter, true);
+        mDragListView.setCanDragHorizontally(true);
+        mDragListView.setCustomDragItem(null);
     }
 
     private static class MyDragItem extends DragItem {
