@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.dontknowwhattocallthis.motivationaltasklist.R;
 import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
 import com.woxthebox.draglistview.DragItemAdapter;
-import com.woxthebox.draglistview.DragListView;
+    import com.woxthebox.draglistview.DragListView;
 
 
 import java.util.ArrayList;
@@ -43,6 +43,7 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(mLayoutId, parent, false);
         return new ViewHolder(view);
     }

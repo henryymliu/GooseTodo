@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,16 +27,16 @@ import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
     ArrayList<TaskItem> taskData;
-    //TaskItemCursorAdapter adapter;
+    TaskItemCursorAdapter adapter;
     Context ctx = this;
     private DragListView mDragListView;
-    private MySwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,8 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //taskAdder tA = new taskAdder(ctx,taskData,adapter);
-                //tA.addNewTask();
+                taskAdder tA = new taskAdder(ctx,taskData,adapter);
+                tA.addNewTask();
                 /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -73,13 +75,11 @@ public class MainScreen extends AppCompatActivity {
             taskData.add(temp);
         }
 
-        mRefreshLayout = (MySwipeRefreshLayout) this.findViewById(R.id.swipe_refresh_layout);
+        //mRefreshLayout = (MySwipeRefreshLayout) this.findViewById(R.id.swipe_refresh_layout);
 
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
 
-        mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
-        //mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.app_color));
 
         /*
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
@@ -97,9 +97,9 @@ public class MainScreen extends AppCompatActivity {
         });*/
         mDragListView.setLayoutManager(new LinearLayoutManager(this));
         //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
-        TaskItemCursorAdapter adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.item_layout, true);
+        adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.item_layout, true);
         mDragListView.setAdapter(adapter, true);
-        mDragListView.setCanDragHorizontally(true);
+        mDragListView.setCanDragHorizontally(false);
         mDragListView.setCustomDragItem(null);
     }
 
@@ -118,18 +118,23 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public void onTaskChecked(View v){
-        DragListView lv = (DragListView) this.findViewById(R.id.list_tasks);
+       /// DragListView lv = (DragListView) this.findViewById(R.id.list_tasks);
         if(((CheckBox) v).isChecked()){
-            /*
-            // TODO: Appropriately update task list
-            int pos = lv.getPositionForView(v);
+            //potential hack
+            Long pos = (Long) ((RelativeLayout) v.getParent()).getTag();
             Toast.makeText(MainScreen.this, "Task checked!" + pos, Toast.LENGTH_SHORT).show();
-            taskData.remove(pos);
+
+            for(TaskItem t: taskData){
+                if(t.getID() == pos){
+                    taskData.remove(t);
+                    break;
+                }
+            }
             adapter.notifyDataSetChanged();
             // warning: hack that functionally works but looks terrible
-            ((CheckBox) v).setChecked(false);
+            //((CheckBox) v).setChecked(false);
             //lv.invalidateViews();
-            */
+
         }
     }
 
