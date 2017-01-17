@@ -40,8 +40,4 @@ public class TaskItemSQL {
         );
         return cursor;
     }
-
-    public static void putTaskItem(TaskItem task){
-
-    }
 }

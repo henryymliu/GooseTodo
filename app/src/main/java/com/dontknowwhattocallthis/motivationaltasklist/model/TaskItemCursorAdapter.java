@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.R;
 import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
+import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
@@ -33,12 +34,31 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
     private int mGrabHandleId;
     private boolean mDragOnLongPress;
 
-    public TaskItemCursorAdapter(ArrayList<TaskItem> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+    public TaskItemCursorAdapter(Cursor mCursor, int layoutId, int grabHandleId, boolean dragOnLongPress) {
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
         mDragOnLongPress = dragOnLongPress;
         setHasStableIds(true);
-        setItemList(list);
+        setItemList(parseCursor(mCursor));
+    }
+
+    private ArrayList<TaskItem> parseCursor(Cursor mCursor){
+        ArrayList<TaskItem> newList = new ArrayList<TaskItem>();
+        try{
+            while(mCursor.moveToNext()){
+                TaskItem temp = new TaskItem(mCursor);
+                newList.add(temp);
+            }
+        }
+        finally{
+            mCursor.close();
+        }
+        return newList;
+    }
+
+    public void setCursor(Cursor mCursor){
+        // create a TaskItem Arraylist from the cursor
+        setItemList(parseCursor(mCursor));
     }
 
     @Override

@@ -1,7 +1,10 @@
 package com.dontknowwhattocallthis.motivationaltasklist;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
+import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
 
 import java.util.Calendar;
@@ -67,12 +70,30 @@ public class TaskItem {
         this.id = ID;
     }
 
-    public void writeToDataBase(){
+    public ContentValues getContentValues(){
+        ContentValues values = new ContentValues();
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE, this.title);
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP, this.duedate.getTime());
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE, this.usedate);
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME, this.usetime);
+        return values;
+    }
+
+    public void writeToDataBease(TaskDBHelper mDbHelper){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if(id < 0){
             // new entry, put and update id
+            this.id = db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
         }
         else{
+            String selection = TaskDBSchema.TaskTable._ID + " = ?";
+            String[] selectionArgs = { String.valueOf(this.id) };
             // updating entry
+            db.update(
+                    TaskDBSchema.TaskTable.TABLE_NAME,
+                    this.getContentValues(),
+                    selection,
+                    selectionArgs);
         }
     }
 }
