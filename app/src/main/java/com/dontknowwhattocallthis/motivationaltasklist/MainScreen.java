@@ -1,6 +1,7 @@
 package com.dontknowwhattocallthis.motivationaltasklist;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,18 +16,22 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
+import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.woxthebox.draglistview.DragListView;
 
 import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity {
-    ArrayList<TaskItem> taskData = new ArrayList<TaskItem>();
-    TaskItemCursorAdapter adapter= new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.item_layout, true);
+    private ArrayList<TaskItem> taskData = new ArrayList<TaskItem>();
+    private TaskItemCursorAdapter adapter;
     Context ctx = this;
     private DragListView mDragListView;
 
     taskAdder tA = new taskAdder(ctx,taskData,adapter);
     private TaskItem undoTask;
+
+    TaskDBHelper tDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,9 @@ public class MainScreen extends AppCompatActivity {
             }
         });
         //add listeners
-        
+
+        tDBHelper = new TaskDBHelper(this);
+
         //create test data
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
         Long[] testDataDates = {1484087306912L,1484087306912L,1484089306912L};
@@ -59,10 +66,11 @@ public class MainScreen extends AppCompatActivity {
         Boolean[] testDataTimeBool = {false, false, true};
         for(int i = 0;i < testData.length;i++){
             TaskItem temp = new TaskItem(testData[i],testDataDates[i],testDataDateBool[i],testDataTimeBool[i]);
-            temp.setID(i);
             taskData.add(temp);
+            temp.writeToDataBase(tDBHelper);
         }
-
+        Cursor mCursor = TaskItemSQL.getAllTaskItems(tDBHelper);
+        adapter = new TaskItemCursorAdapter(mCursor, R.layout.task_item, R.id.item_layout, true);
         //mRefreshLayout = (MySwipeRefreshLayout) this.findViewById(R.id.swipe_refresh_layout);
 
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);

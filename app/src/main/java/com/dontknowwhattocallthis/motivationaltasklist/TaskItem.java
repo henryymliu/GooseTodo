@@ -77,7 +77,7 @@ public class TaskItem {
         return values;
     }
 
-    public void writeToDataBease(TaskDBHelper mDbHelper){
+    public void writeToDataBase(TaskDBHelper mDbHelper){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if(id < 0){
             // new entry, put and update id
