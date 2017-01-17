@@ -18,7 +18,7 @@ public class TaskItem {
     private Date duedate;
     private boolean usedate;
     private boolean usetime;
-    private long id;
+    private long id = -1;
 
     public TaskItem(){}
 
@@ -65,5 +65,14 @@ public class TaskItem {
     }
     public void setID(long ID) {
         this.id = ID;
+    }
+
+    public void writeToDataBase(){
+        if(id < 0){
+            // new entry, put and update id
+        }
+        else{
+            // updating entry
+        }
     }
 }

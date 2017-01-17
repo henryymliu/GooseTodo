@@ -80,17 +80,7 @@ public class MainScreen extends AppCompatActivity {
 
         mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
         //mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.app_color));
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-            }
-        });
+
         /*
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override

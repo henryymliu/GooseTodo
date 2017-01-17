@@ -52,7 +52,7 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
         super.onBindViewHolder(holder, position);
         String text = mItemList.get(position).getTitle();
         holder.mText.setText(text);
-        holder.itemView.setTag(text);
+        holder.itemView.setTag(mItemList.get(position).getID());
     }
 
     @Override
