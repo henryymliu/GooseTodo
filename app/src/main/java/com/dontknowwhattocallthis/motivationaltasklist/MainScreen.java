@@ -1,11 +1,13 @@
 package com.dontknowwhattocallthis.motivationaltasklist;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
@@ -13,9 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
+import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
@@ -26,7 +30,7 @@ import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
     ArrayList<TaskItem> taskData;
-    TaskItemCursorAdapter adapter;
+    //TaskItemCursorAdapter adapter;
     Context ctx = this;
     private DragListView mDragListView;
 
@@ -38,12 +42,14 @@ public class MainScreen extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //setTitle("Tasks");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                taskAdder tA = new taskAdder(ctx,taskData,adapter);
-                tA.addNewTask();
+                //taskAdder tA = new taskAdder(ctx,taskData,adapter);
+                //tA.addNewTask();
                 /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -64,6 +70,7 @@ public class MainScreen extends AppCompatActivity {
             taskData.add(temp);
         }
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
+        mDragListView.setLayoutManager(new LinearLayoutManager(mDragListView.getContext()));
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
@@ -79,9 +86,26 @@ public class MainScreen extends AppCompatActivity {
             }
         });
         //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
-        adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.layout.task_item, false);
+        TaskItemCursorAdapter adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.task_item_task_date, false);
+        mDragListView.setCanDragHorizontally(false);
         mDragListView.setAdapter(adapter,false);
+        mDragListView.setCustomDragItem(new MyDragItem(this, R.layout.task_item));
     }
+
+    private static class MyDragItem extends DragItem {
+
+        public MyDragItem(Context context, int layoutId) {
+            super(context, layoutId);
+        }
+
+        @Override
+        public void onBindDragView(View clickedView, View dragView) {
+            CharSequence text = ((TextView) clickedView.findViewById(R.id.task_item_task_desc)).getText();
+            ((TextView) dragView.findViewById(R.id.task_item_task_desc)).setText(text);
+            dragView.setBackgroundColor(dragView.getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
     public void onTaskChecked(View v){
         DragListView lv = (DragListView) this.findViewById(R.id.list_tasks);
         if(((CheckBox) v).isChecked()){
