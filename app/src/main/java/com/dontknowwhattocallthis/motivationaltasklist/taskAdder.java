@@ -148,7 +148,7 @@ public class taskAdder {
     }
     private void updateData() {
         /*
-        HashMap<String, String> newTask = new HashMap<String, String>(2);//TODO: change this dataset
+        HashMap<String, String> newTask = new HashMap<String, String>(2);
         newTask.put("task", task.getTitle());
 
         if (task.hasDate()) { //date, no time
@@ -169,7 +169,7 @@ public class taskAdder {
         */
         //TODO: change these two lines
         taskData.add(task);
-        adapter.notifyDataSetChanged();
+       // adapter.notifyDataSetChanged();
     }
 
 }
