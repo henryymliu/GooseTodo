@@ -1,13 +1,9 @@
 package com.dontknowwhattocallthis.motivationaltasklist.model;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +11,6 @@ import com.dontknowwhattocallthis.motivationaltasklist.R;
 import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.woxthebox.draglistview.DragItemAdapter;
-    import com.woxthebox.draglistview.DragListView;
-
 
 import java.util.ArrayList;
 
@@ -91,12 +85,12 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
 
         @Override
         public void onItemClicked(View view) {
-            Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public boolean onItemLongClicked(View view) {
-            Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
             return true;
         }
     }

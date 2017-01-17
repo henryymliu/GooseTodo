@@ -1,42 +1,32 @@
 package com.dontknowwhattocallthis.motivationaltasklist;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
-import com.woxthebox.draglistview.DragItem;
-import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
-    ArrayList<TaskItem> taskData;
-    TaskItemCursorAdapter adapter;
+    ArrayList<TaskItem> taskData = new ArrayList<TaskItem>();
+    TaskItemCursorAdapter adapter= new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.item_layout, true);
     Context ctx = this;
     private DragListView mDragListView;
+
+    taskAdder tA = new taskAdder(ctx,taskData,adapter);
+    private TaskItem undoTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +42,7 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                taskAdder tA = new taskAdder(ctx,taskData,adapter);
+
                 tA.addNewTask();
                 /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -62,13 +52,11 @@ public class MainScreen extends AppCompatActivity {
         });
         //add listeners
         
-        //create test data //TODO: change dataset
+        //create test data
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
         Long[] testDataDates = {1484087306912L,1484087306912L,1484089306912L};
         Boolean[] testDataDateBool = {false, true, true};
         Boolean[] testDataTimeBool = {false, false, true};
-
-        taskData = new ArrayList<TaskItem>();
         for(int i = 0;i < testData.length;i++){
             TaskItem temp = new TaskItem(testData[i],testDataDates[i],testDataDateBool[i],testDataTimeBool[i]);
             temp.setID(i);
@@ -96,37 +84,23 @@ public class MainScreen extends AppCompatActivity {
             }
         });*/
         mDragListView.setLayoutManager(new LinearLayoutManager(this));
-        //SimpleAdapter adapter = new SimpleAdapter(this,taskData,android.R.layout.simple_list_item_2,new String[]{"task","date"}, new int[]{android.R.id.text1,android.R.id.text2});
-        adapter = new TaskItemCursorAdapter(taskData,R.layout.task_item, R.id.item_layout, true);
         mDragListView.setAdapter(adapter, true);
         mDragListView.setCanDragHorizontally(false);
         mDragListView.setCustomDragItem(null);
-    }
-
-    private static class MyDragItem extends DragItem {
-
-        public MyDragItem(Context context, int layoutId) {
-            super(context, layoutId);
-        }
-
-        @Override
-        public void onBindDragView(View clickedView, View dragView) {
-            CharSequence text = ((TextView) clickedView.findViewById(R.id.task_item_task_desc)).getText();
-            ((TextView) dragView.findViewById(R.id.task_item_task_desc)).setText(text);
-            dragView.setBackgroundColor(dragView.getResources().getColor(R.color.colorPrimary));
-        }
     }
 
     public void onTaskChecked(View v){
        /// DragListView lv = (DragListView) this.findViewById(R.id.list_tasks);
         if(((CheckBox) v).isChecked()){
             //potential hack
-            Long pos = (Long) ((RelativeLayout) v.getParent()).getTag();
-            Toast.makeText(MainScreen.this, "Task checked!" + pos, Toast.LENGTH_SHORT).show();
+            //Get tag of parent layout
+            Long pos = (Long) ((ViewGroup) v.getParent()).getTag();
+            Toast.makeText(MainScreen.this, "Task completed!", Toast.LENGTH_SHORT).show();
 
             for(TaskItem t: taskData){
                 if(t.getID() == pos){
-                    taskData.remove(t);
+                    undoTask = t;
+                    taskData.remove(t); //TODO: Update database, implement undo function
                     break;
                 }
             }

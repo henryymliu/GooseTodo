@@ -6,26 +6,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-//import android.text.format.DateFormat;
-import android.util.TimeFormatException;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+
+//import android.text.format.DateFormat;
 
 /**
  * Created by Henry on 1/4/2017.
  */
 
 public class taskAdder {
-    private final TaskItem task = new TaskItem();
+    private TaskItem task;
     private Context ctx;
     //TODO: change following two lines
     private ArrayList<TaskItem> taskData;
@@ -42,7 +39,7 @@ public class taskAdder {
 
         // final String taskName;
         //String taskDate = "jsdflkj"
-
+        task = new TaskItem();
         AlertDialog.Builder getTaskTitleBuilder = new AlertDialog.Builder(ctx);
         getTaskTitleBuilder.setTitle("Create new task");
 
@@ -169,7 +166,7 @@ public class taskAdder {
         */
         //TODO: change these two lines
         taskData.add(task);
-       // adapter.notifyDataSetChanged();
+       adapter.notifyDataSetChanged();
     }
 
 }

@@ -7,9 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by Henry Liu on 1/2/2017.

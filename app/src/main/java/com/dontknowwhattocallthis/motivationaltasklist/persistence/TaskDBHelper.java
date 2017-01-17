@@ -4,9 +4,10 @@ package com.dontknowwhattocallthis.motivationaltasklist.persistence;
  * Created by Cheng on 03/01/2017.
  * TaskDBHelper raps SQLiteOpenHelper and should be used to make read and write
  */
+
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.content.Context;
 
 public class TaskDBHelper extends SQLiteOpenHelper{
     // If you change the database schema, you must increment the database version.
