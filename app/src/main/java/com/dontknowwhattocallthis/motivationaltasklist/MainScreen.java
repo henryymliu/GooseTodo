@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
@@ -29,7 +28,7 @@ public class MainScreen extends AppCompatActivity {
     Context ctx = this;
     private DragListView mDragListView;
 
-    taskAdder tA;
+    taskHandler tA;
     private TaskItem undoTask;
 
 
@@ -60,6 +59,7 @@ public class MainScreen extends AppCompatActivity {
 
 
         //create test data
+        /*
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
         Long[] testDataDates = {1484087306912L,1484087306912L,1484089306912L};
         Boolean[] testDataDateBool = {false, true, true};
@@ -69,9 +69,10 @@ public class MainScreen extends AppCompatActivity {
             taskData.add(temp);
             temp.writeToDataBase(tDBHelper);
         }
+        */
         Cursor mCursor = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter = new TaskItemCursorAdapter(mCursor, R.layout.task_item, R.id.item_layout, true);
-        tA = new taskAdder(ctx,taskData, tDBHelper, adapter);
+        tA = new taskHandler(ctx,taskData, tDBHelper, adapter);
         //mRefreshLayout = (MySwipeRefreshLayout) this.findViewById(R.id.swipe_refresh_layout);
 
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);

@@ -35,8 +35,8 @@ public class TaskItem {
         this.title = cursor.getString(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE));
         this.duedate = new Date(cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP)));
         // Because Cursor doesn't support getBoolean for some reason
-        this.usedate = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME))==1;
-        this.usetime = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE))==1;
+        this.usedate = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE))==1;
+        this.usetime = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME))==1;
     }
 
     public String getTitle(){
@@ -73,8 +73,9 @@ public class TaskItem {
         ContentValues values = new ContentValues();
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE, this.title);
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP, this.duedate.getTime());
-        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE, this.usedate);
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME, this.usetime);
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE, this.usedate);
+
         return values;
     }
 
