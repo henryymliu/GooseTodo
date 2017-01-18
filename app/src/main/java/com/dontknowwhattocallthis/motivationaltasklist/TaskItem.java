@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Date;
 public class TaskItem {
     private String title;
     //private Calendar taskDueDate;
-    private Date duedate;
+    private Date duedate = Calendar.getInstance().getTime();
     private boolean usedate;
     private boolean usetime;
     private long id = -1;

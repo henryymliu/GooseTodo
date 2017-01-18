@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
+import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,13 +28,14 @@ public class taskAdder {
     //TODO: change following two lines
     private ArrayList<TaskItem> taskData;
     private TaskItemCursorAdapter adapter;
-
+    private TaskDBHelper tDBHelper;
     private Calendar currCal = Calendar.getInstance();
 
-    public taskAdder(Context ctx, ArrayList<TaskItem> taskData, TaskItemCursorAdapter adapter){
+    public taskAdder(Context ctx, ArrayList<TaskItem> taskData, TaskDBHelper tDB, TaskItemCursorAdapter adapter){
         this.ctx = ctx;
         this.taskData = taskData;
         this.adapter = adapter;
+        this.tDBHelper = tDB;
     }
     public void addNewTask(){
 
@@ -166,7 +168,8 @@ public class taskAdder {
         */
         //TODO: change these two lines
         taskData.add(task);
-       adapter.notifyDataSetChanged();
+        task.writeToDataBase(tDBHelper);
+        adapter.notifyDataSetChanged();
     }
 
 }

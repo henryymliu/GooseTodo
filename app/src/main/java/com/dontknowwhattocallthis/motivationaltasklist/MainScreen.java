@@ -24,14 +24,14 @@ import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity {
     private ArrayList<TaskItem> taskData = new ArrayList<TaskItem>();
+    TaskDBHelper tDBHelper = new TaskDBHelper(this);
     private TaskItemCursorAdapter adapter;
     Context ctx = this;
     private DragListView mDragListView;
 
-    taskAdder tA = new taskAdder(ctx,taskData,adapter);
+    taskAdder tA;
     private TaskItem undoTask;
 
-    TaskDBHelper tDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class MainScreen extends AppCompatActivity {
         });
         //add listeners
 
-        tDBHelper = new TaskDBHelper(this);
+
 
         //create test data
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
@@ -71,6 +71,7 @@ public class MainScreen extends AppCompatActivity {
         }
         Cursor mCursor = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter = new TaskItemCursorAdapter(mCursor, R.layout.task_item, R.id.item_layout, true);
+        tA = new taskAdder(ctx,taskData, tDBHelper, adapter);
         //mRefreshLayout = (MySwipeRefreshLayout) this.findViewById(R.id.swipe_refresh_layout);
 
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
