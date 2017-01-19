@@ -40,6 +40,8 @@ public class taskHandler {
         this.adapter = adapter;
         this.tDBHelper = tDB;
     }
+
+    //creates dialog box to create task title
     public void addNewTask(){
 
         // final String taskName;
@@ -88,9 +90,10 @@ public class taskHandler {
 
         int cYear = currCal.get(Calendar.YEAR);
         int cMonth = currCal.get(Calendar.MONTH);
-        int cDay = currCal.get(Calendar.DAY_OF_WEEK);
+        int cDay = currCal.get(Calendar.DAY_OF_MONTH);
 
         final DatePickerDialog dpDialog = new DatePickerDialog(ctx,null,cYear,cMonth,cDay);
+        dpDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
         dpDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Select time", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -133,6 +136,7 @@ public class taskHandler {
         dpDialog.show();
     }
 
+    //Creates time picker dialog, with values passed from datepicker to create milli time
     private void setTaskTime(int[] dateParam){
         final int[] dateArr = dateParam;
         final TimePickerDialog tpDialog = new TimePickerDialog(ctx,new TimePickerDialog.OnTimeSetListener(){
@@ -148,6 +152,8 @@ public class taskHandler {
         }, currCal.get(Calendar.HOUR_OF_DAY), currCal.get(Calendar.MINUTE),false);
         tpDialog.show();
     }
+
+    //Adds a task to database and notifies adapter
     private void updateAddData(TaskItem t) {
         /*
         HashMap<String, String> newTask = new HashMap<String, String>(2);
@@ -177,6 +183,7 @@ public class taskHandler {
 
     }
 
+    //Removes task and stores it in undo field; deletes from database
     public void updateRemoveData(Long pos){
         undoTask = TaskItemSQL.deleteTaskItem(tDBHelper,pos);
         undoTask.deleteFromDataBase(tDBHelper);
@@ -186,6 +193,7 @@ public class taskHandler {
 
     }
 
+    //Restores recently deleted task to list
     public void addUndoTask(){
         assert(undoTask != null);
         updateAddData(undoTask);
