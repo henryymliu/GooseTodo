@@ -94,4 +94,13 @@ public class TaskItem {
                     selectionArgs);
         }
     }
+
+    public void deleteFromDataBase(TaskDBHelper mDbHelper){
+        String selection = TaskDBSchema.TaskTable._ID + " = ?";
+        String[] selectionArgs = { String.valueOf(this.id) };
+        int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
+        // one and only one thing should have been deleted
+        assert(count == 1);
+        this.id = -1;
+    }
 }

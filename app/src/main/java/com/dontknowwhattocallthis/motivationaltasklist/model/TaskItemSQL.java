@@ -40,4 +40,9 @@ public class TaskItemSQL {
         );
         return cursor;
     }
+
+    public static int deleteAllTaskItems(TaskDBHelper dbHelper){
+        int count  = dbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, null, null);
+        return count;
+    }
 }
