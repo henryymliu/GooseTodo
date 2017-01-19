@@ -19,6 +19,7 @@ public class TaskItem {
 
     //private Calendar taskDueDate;
     private Date duedate = Calendar.getInstance().getTime();
+    private Date currDate;
     private boolean usedate;
     private boolean usetime;
     private long id = -1;
@@ -46,7 +47,7 @@ public class TaskItem {
             assert(duedate != null);
             //check if task overdue
             if(this.currDate.compareTo(this.duedate) > 0){
-                this.isOverdue = true; //TODO:  Change text color to red
+                this.isOverdue = true;
             }
         }
 

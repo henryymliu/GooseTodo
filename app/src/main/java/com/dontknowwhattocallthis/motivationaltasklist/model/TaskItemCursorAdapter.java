@@ -1,6 +1,7 @@
 package com.dontknowwhattocallthis.motivationaltasklist.model;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,9 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
             if(mItemList.get(position).hasTime()){ //date and time
                 DateFormat tF = DateFormat.getTimeInstance(DateFormat.SHORT);
                 stringDate.append(", " + tF.format(mItemList.get(position).getDueDate())); //maybe adjust this
+            }
+            if(mItemList.get(position).isOverdue()){ //TODO: update current time
+                holder.dateText.setTextColor(Color.RED);
             }
             holder.dateText.setText(stringDate.toString());
         }

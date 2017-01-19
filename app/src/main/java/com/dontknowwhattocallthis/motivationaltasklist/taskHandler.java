@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
@@ -27,7 +28,6 @@ import java.util.Calendar;
 public class taskHandler {
     private TaskItem task;
     private Context ctx;
-    //TODO: change following two lines
     private ArrayList<TaskItem> taskData;
     private TaskItemCursorAdapter adapter;
     private TaskDBHelper tDBHelper;
@@ -74,7 +74,7 @@ public class taskHandler {
                 String taskName = titleInput.getText().toString();
                 task.setName(taskName);
                 task.setUseDate(false);task.setUseTime(false);
-                updateData();
+                updateAddData();
                 dialog.dismiss();
             }
         });
@@ -125,7 +125,7 @@ public class taskHandler {
                 task.setDate(cal.getTime());
                 task.setUseDate(true);
                 task.setUseTime(false);
-                updateData();
+                updateAddData();
                 dialog.dismiss();
             }
         });
@@ -141,13 +141,13 @@ public class taskHandler {
                 cal.set(dateArr[0], dateArr[1],dateArr[2], uHour, uMinute);
                 task.setDate(cal.getTime());
                 task.setUseTime(true);
-                updateData();
+                updateAddData();
 
             }
         }, currCal.get(Calendar.HOUR_OF_DAY), currCal.get(Calendar.MINUTE),false);
         tpDialog.show();
     }
-    private void updateData() {
+    private void updateAddData() {
         /*
         HashMap<String, String> newTask = new HashMap<String, String>(2);
         newTask.put("task", task.getTitle());
@@ -174,6 +174,13 @@ public class taskHandler {
         adapter.setCursor(c);
         adapter.notifyDataSetChanged();
 
+    }
+
+    public void updateRemoveData(Long pos){
+        TaskItemSQL.deleteTaskItem(tDBHelper,pos);
+        Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
+        adapter.setCursor(c);
+        adapter.notifyDataSetChanged();
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -119,9 +120,10 @@ public class MainScreen extends AppCompatActivity {
                             //TODO: Implement undo item field
                         }
                     }).show();
+            tA.updateRemoveData(pos);
             adapter.notifyDataSetChanged();
             // warning: hack that functionally works but looks terrible
-            //((CheckBox) v).setChecked(false);
+            ((CheckBox) v).setChecked(false);
             //lv.invalidateViews();
 
         }
