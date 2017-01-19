@@ -4,43 +4,46 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-//import android.text.format.DateFormat;
-import android.util.TimeFormatException;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
 
-import java.text.DateFormat;
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
+import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+
+//import android.text.format.DateFormat;
 
 /**
  * Created by Henry on 1/4/2017.
  */
 
-public class taskAdder {
-    private final TaskItem task = new TaskItem();
+public class taskHandler {
+    private TaskItem task;
     private Context ctx;
     //TODO: change following two lines
-    private ArrayList<HashMap<String,String>> taskData;
-    private SimpleAdapter adapter;
-
+    private ArrayList<TaskItem> taskData;
+    private TaskItemCursorAdapter adapter;
+    private TaskDBHelper tDBHelper;
     private Calendar currCal = Calendar.getInstance();
 
-    public taskAdder(Context ctx, ArrayList<HashMap<String,String>> taskData, SimpleAdapter adapter){
+    public taskHandler(Context ctx, ArrayList<TaskItem> taskData, TaskDBHelper tDB, TaskItemCursorAdapter adapter){
         this.ctx = ctx;
         this.taskData = taskData;
         this.adapter = adapter;
+        this.tDBHelper = tDB;
     }
     public void addNewTask(){
 
         // final String taskName;
         //String taskDate = "jsdflkj"
-
+        task = new TaskItem();
         AlertDialog.Builder getTaskTitleBuilder = new AlertDialog.Builder(ctx);
         getTaskTitleBuilder.setTitle("Create new task");
 
@@ -145,7 +148,8 @@ public class taskAdder {
         tpDialog.show();
     }
     private void updateData() {
-        HashMap<String, String> newTask = new HashMap<String, String>(2);//TODO: change this dataset
+        /*
+        HashMap<String, String> newTask = new HashMap<String, String>(2);
         newTask.put("task", task.getTitle());
 
         if (task.hasDate()) { //date, no time
@@ -163,10 +167,13 @@ public class taskAdder {
         else { //task name only
             newTask.put("date", "");
         }
-
-        //TODO: change these two lines
-        taskData.add(newTask);
+        */
+        taskData.add(task);
+        task.writeToDataBase(tDBHelper);
+        Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
+        adapter.setCursor(c);
         adapter.notifyDataSetChanged();
+
     }
 
 }
