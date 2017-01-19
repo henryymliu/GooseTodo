@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:id="@+id/item_layout"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -7,6 +8,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_selector"
     >
+
 
 <CheckBox
     android:layout_width="wrap_content"
@@ -30,6 +32,14 @@
     android:text = "TEST"
     android:layout_below="@id/task_item_task_desc"
     android:layout_toRightOf="@id/taskCheckBox" />
+
+<View
+    android:id = "@+id/priorityBar"
+    android:layout_width="20dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight = "true"
+    android:layout_alignBottom="@id/task_item_task_date"/>
+    <!--android:background="@android:color/holo_red_dark"-->
 
 
 

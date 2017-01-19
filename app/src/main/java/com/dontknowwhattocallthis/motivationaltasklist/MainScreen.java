@@ -58,6 +58,7 @@ public class MainScreen extends AppCompatActivity {
 
 
 
+
         //create test data
         /*
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
@@ -66,9 +67,11 @@ public class MainScreen extends AppCompatActivity {
         Boolean[] testDataTimeBool = {false, false, true};
         for(int i = 0;i < testData.length;i++){
             TaskItem temp = new TaskItem(testData[i],testDataDates[i],testDataDateBool[i],testDataTimeBool[i]);
+
             taskData.add(temp);
             temp.writeToDataBase(tDBHelper);
         }
+
         */
         Cursor mCursor = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter = new TaskItemCursorAdapter(mCursor, R.layout.task_item, R.id.item_layout, true);
@@ -97,23 +100,25 @@ public class MainScreen extends AppCompatActivity {
         mDragListView.setAdapter(adapter, true);
         mDragListView.setCanDragHorizontally(false);
         mDragListView.setCustomDragItem(null);
+
     }
 
     public void onTaskChecked(View v){
        /// DragListView lv = (DragListView) this.findViewById(R.id.list_tasks);
         if(((CheckBox) v).isChecked()){
+
             //potential hack
             //Get tag of parent layout
             Long pos = (Long) ((ViewGroup) v.getParent()).getTag();
-            Toast.makeText(MainScreen.this, "Task completed!", Toast.LENGTH_SHORT).show();
 
-            for(TaskItem t: taskData){
-                if(t.getID() == pos){
-                    undoTask = t;
-                    taskData.remove(t); //TODO: Update database, implement undo function
-                    break;
-                }
-            }
+
+            Snackbar.make(v, "Task completed!", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TODO: Implement undo item field
+                        }
+                    }).show();
             adapter.notifyDataSetChanged();
             // warning: hack that functionally works but looks terrible
             //((CheckBox) v).setChecked(false);
