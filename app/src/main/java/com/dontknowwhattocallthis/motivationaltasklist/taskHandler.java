@@ -32,6 +32,7 @@ public class taskHandler {
     private TaskItemCursorAdapter adapter;
     private TaskDBHelper tDBHelper;
     private Calendar currCal = Calendar.getInstance();
+    private TaskItem undoTask;
 
     public taskHandler(Context ctx, ArrayList<TaskItem> taskData, TaskDBHelper tDB, TaskItemCursorAdapter adapter){
         this.ctx = ctx;
@@ -74,7 +75,7 @@ public class taskHandler {
                 String taskName = titleInput.getText().toString();
                 task.setName(taskName);
                 task.setUseDate(false);task.setUseTime(false);
-                updateAddData();
+                updateAddData(task);
                 dialog.dismiss();
             }
         });
@@ -125,7 +126,7 @@ public class taskHandler {
                 task.setDate(cal.getTime());
                 task.setUseDate(true);
                 task.setUseTime(false);
-                updateAddData();
+                updateAddData(task);
                 dialog.dismiss();
             }
         });
@@ -141,13 +142,13 @@ public class taskHandler {
                 cal.set(dateArr[0], dateArr[1],dateArr[2], uHour, uMinute);
                 task.setDate(cal.getTime());
                 task.setUseTime(true);
-                updateAddData();
+                updateAddData(task);
 
             }
         }, currCal.get(Calendar.HOUR_OF_DAY), currCal.get(Calendar.MINUTE),false);
         tpDialog.show();
     }
-    private void updateAddData() {
+    private void updateAddData(TaskItem t) {
         /*
         HashMap<String, String> newTask = new HashMap<String, String>(2);
         newTask.put("task", task.getTitle());
@@ -168,8 +169,8 @@ public class taskHandler {
             newTask.put("date", "");
         }
         */
-        taskData.add(task);
-        task.writeToDataBase(tDBHelper);
+        taskData.add(t);
+        t.writeToDataBase(tDBHelper);
         Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter.setCursor(c);
         adapter.notifyDataSetChanged();
@@ -177,10 +178,17 @@ public class taskHandler {
     }
 
     public void updateRemoveData(Long pos){
-        TaskItemSQL.deleteTaskItem(tDBHelper,pos);
+        undoTask = TaskItemSQL.deleteTaskItem(tDBHelper,pos);
+        undoTask.deleteFromDataBase(tDBHelper);
         Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter.setCursor(c);
         adapter.notifyDataSetChanged();
+
+    }
+
+    public void addUndoTask(){
+        assert(undoTask != null);
+        updateAddData(undoTask);
     }
 
 }

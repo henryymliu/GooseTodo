@@ -12,16 +12,17 @@ import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
  */
 
 public class TaskItemSQL {
+     static String[] projection = {
+            TaskDBSchema.TaskTable._ID,
+            TaskDBSchema.TaskTable.COLUMN_NAME_TITLE,
+            TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP,
+            TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE,
+            TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME
+    };
     public static Cursor getAllTaskItems(TaskDBHelper dbhelper){
         SQLiteDatabase db = dbhelper.getReadableDatabase();
         
-        String[] projection = {
-                TaskDBSchema.TaskTable._ID,
-                TaskDBSchema.TaskTable.COLUMN_NAME_TITLE,
-                TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP,
-                TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE,
-                TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME
-        };
+
 
         String selection = TaskDBSchema.TaskTable.COLUMN_NAME_TITLE + " = ?";
         String[] selectionArgs = { "My Title" };
@@ -46,11 +47,25 @@ public class TaskItemSQL {
         return count;
     }
 
-    public static void deleteTaskItem(TaskDBHelper mDbHelper, long id){
+    public static TaskItem deleteTaskItem(TaskDBHelper mDbHelper, long id){
         String selection = TaskDBSchema.TaskTable._ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
+        String sortOrder =
+                TaskDBSchema.TaskTable._ID + " ASC";
+        //System.out.println(id);
+        Cursor dC = mDbHelper.getReadableDatabase().query(
+                TaskDBSchema.TaskTable.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+        null,
+        null,
+        null);
+        dC.moveToNext();
+        TaskItem deletedItem = new TaskItem(dC);
         int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
         // one and only one thing should have been deleted
         assert(count == 1);
+        return deletedItem;
     }
 }

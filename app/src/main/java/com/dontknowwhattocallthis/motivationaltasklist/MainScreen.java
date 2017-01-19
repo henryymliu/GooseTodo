@@ -30,7 +30,7 @@ public class MainScreen extends AppCompatActivity {
     private DragListView mDragListView;
 
     taskHandler tA;
-    private TaskItem undoTask;
+
 
 
     @Override
@@ -111,16 +111,18 @@ public class MainScreen extends AppCompatActivity {
             //potential hack
             //Get tag of parent layout
             Long pos = (Long) ((ViewGroup) v.getParent()).getTag();
+            tA.updateRemoveData(pos);
 
-
-            Snackbar.make(v, "Task completed!", Snackbar.LENGTH_LONG)
+            Snackbar.make(findViewById(R.id.content_main_screen), "Task completed!", Snackbar.LENGTH_LONG)
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //TODO: Implement undo item field
+                            tA.addUndoTask();
+                            //tA.updateAddData();
                         }
                     }).show();
-            tA.updateRemoveData(pos);
+
             adapter.notifyDataSetChanged();
             // warning: hack that functionally works but looks terrible
             ((CheckBox) v).setChecked(false);
