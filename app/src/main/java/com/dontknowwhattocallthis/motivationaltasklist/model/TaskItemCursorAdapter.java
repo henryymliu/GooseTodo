@@ -1,22 +1,18 @@
 package com.dontknowwhattocallthis.motivationaltasklist.model;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.R;
 import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
+import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.woxthebox.draglistview.DragItemAdapter;
-import com.woxthebox.draglistview.DragListView;
 
-
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 /**
@@ -33,16 +29,36 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
     private int mGrabHandleId;
     private boolean mDragOnLongPress;
 
-    public TaskItemCursorAdapter(ArrayList<TaskItem> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+    public TaskItemCursorAdapter(Cursor mCursor, int layoutId, int grabHandleId, boolean dragOnLongPress) {
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
         mDragOnLongPress = dragOnLongPress;
         setHasStableIds(true);
-        setItemList(list);
+        setItemList(parseCursor(mCursor));
+    }
+
+    private ArrayList<TaskItem> parseCursor(Cursor mCursor){
+        ArrayList<TaskItem> newList = new ArrayList<TaskItem>();
+        try{
+            while(mCursor.moveToNext()){
+                TaskItem temp = new TaskItem(mCursor);
+                newList.add(temp);
+            }
+        }
+        finally{
+            mCursor.close();
+        }
+        return newList;
+    }
+
+    public void setCursor(Cursor mCursor){
+        // create a TaskItem Arraylist from the cursor
+        setItemList(parseCursor(mCursor));
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(mLayoutId, parent, false);
         return new ViewHolder(view);
     }
@@ -52,7 +68,24 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
         super.onBindViewHolder(holder, position);
         String text = mItemList.get(position).getTitle();
         holder.mText.setText(text);
-        holder.itemView.setTag(text);
+        holder.itemView.setTag(mItemList.get(position).getID());
+
+        if (mItemList.get(position).hasDate()) { //date, no time
+            DateFormat dF = DateFormat.getDateInstance(DateFormat.LONG);
+
+            StringBuilder stringDate = new StringBuilder();
+            stringDate.append(dF.format(mItemList.get(position).getDueDate()));
+            if(mItemList.get(position).hasTime()){ //date and time
+                DateFormat tF = DateFormat.getTimeInstance(DateFormat.SHORT);
+                stringDate.append(", " + tF.format(mItemList.get(position).getDueDate())); //maybe adjust this
+            }
+            holder.dateText.setText(stringDate.toString());
+        }
+
+        else { //task name only
+            //newTask.put("date", "");
+            holder.dateText.setText("");
+        }
     }
 
     @Override
@@ -62,20 +95,22 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
 
     public class ViewHolder extends DragItemAdapter.ViewHolder {
         public TextView mText;
+        public TextView dateText;
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
-            mText = (TextView) itemView.findViewById(R.id.text);
+            mText = (TextView) itemView.findViewById(R.id.task_item_task_desc);
+            dateText = (TextView) itemView.findViewById(R.id.task_item_task_date);
         }
 
         @Override
         public void onItemClicked(View view) {
-            Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public boolean onItemLongClicked(View view) {
-            Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
             return true;
         }
     }

@@ -41,7 +41,16 @@ public class TaskItemSQL {
         return cursor;
     }
 
-    public static void putTaskItem(TaskItem task){
+    public static int deleteAllTaskItems(TaskDBHelper dbHelper){
+        int count  = dbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, null, null);
+        return count;
+    }
 
+    public static void deleteTaskItem(TaskDBHelper mDbHelper, long id){
+        String selection = TaskDBSchema.TaskTable._ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id) };
+        int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
+        // one and only one thing should have been deleted
+        assert(count == 1);
     }
 }
