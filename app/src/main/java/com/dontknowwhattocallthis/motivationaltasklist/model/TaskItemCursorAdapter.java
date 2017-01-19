@@ -12,6 +12,7 @@ import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.woxthebox.draglistview.DragItemAdapter;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 /**
@@ -68,6 +69,23 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
         String text = mItemList.get(position).getTitle();
         holder.mText.setText(text);
         holder.itemView.setTag(mItemList.get(position).getID());
+
+        if (mItemList.get(position).hasDate()) { //date, no time
+            DateFormat dF = DateFormat.getDateInstance(DateFormat.LONG);
+
+            StringBuilder stringDate = new StringBuilder();
+            stringDate.append(dF.format(mItemList.get(position).getDueDate()));
+            if(mItemList.get(position).hasTime()){ //date and time
+                DateFormat tF = DateFormat.getTimeInstance(DateFormat.SHORT);
+                stringDate.append(", " + tF.format(mItemList.get(position).getDueDate())); //maybe adjust this
+            }
+            holder.dateText.setText(stringDate.toString());
+        }
+
+        else { //task name only
+            //newTask.put("date", "");
+            holder.dateText.setText("");
+        }
     }
 
     @Override
@@ -77,10 +95,12 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
 
     public class ViewHolder extends DragItemAdapter.ViewHolder {
         public TextView mText;
+        public TextView dateText;
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
             mText = (TextView) itemView.findViewById(R.id.task_item_task_desc);
+            dateText = (TextView) itemView.findViewById(R.id.task_item_task_date);
         }
 
         @Override

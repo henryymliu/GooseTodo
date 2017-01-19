@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.widget.DatePicker;
@@ -11,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
+import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,19 +24,20 @@ import java.util.Calendar;
  * Created by Henry on 1/4/2017.
  */
 
-public class taskAdder {
+public class taskHandler {
     private TaskItem task;
     private Context ctx;
     //TODO: change following two lines
     private ArrayList<TaskItem> taskData;
     private TaskItemCursorAdapter adapter;
-
+    private TaskDBHelper tDBHelper;
     private Calendar currCal = Calendar.getInstance();
 
-    public taskAdder(Context ctx, ArrayList<TaskItem> taskData, TaskItemCursorAdapter adapter){
+    public taskHandler(Context ctx, ArrayList<TaskItem> taskData, TaskDBHelper tDB, TaskItemCursorAdapter adapter){
         this.ctx = ctx;
         this.taskData = taskData;
         this.adapter = adapter;
+        this.tDBHelper = tDB;
     }
     public void addNewTask(){
 
@@ -164,9 +168,12 @@ public class taskAdder {
             newTask.put("date", "");
         }
         */
-        //TODO: change these two lines
         taskData.add(task);
-       adapter.notifyDataSetChanged();
+        task.writeToDataBase(tDBHelper);
+        Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
+        adapter.setCursor(c);
+        adapter.notifyDataSetChanged();
+
     }
 
 }

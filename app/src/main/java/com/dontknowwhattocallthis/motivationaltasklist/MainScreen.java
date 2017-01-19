@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
@@ -24,14 +23,14 @@ import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity {
     private ArrayList<TaskItem> taskData = new ArrayList<TaskItem>();
+    TaskDBHelper tDBHelper = new TaskDBHelper(this);
     private TaskItemCursorAdapter adapter;
     Context ctx = this;
     private DragListView mDragListView;
 
-    taskAdder tA = new taskAdder(ctx,taskData,adapter);
+    taskHandler tA;
     private TaskItem undoTask;
 
-    TaskDBHelper tDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +56,10 @@ public class MainScreen extends AppCompatActivity {
         });
         //add listeners
 
-        tDBHelper = new TaskDBHelper(this);
+
 
         //create test data
+        /*
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
         Long[] testDataDates = {1484087306912L,1484087306912L,1484089306912L};
         Boolean[] testDataDateBool = {false, true, true};
@@ -69,8 +69,10 @@ public class MainScreen extends AppCompatActivity {
             taskData.add(temp);
             temp.writeToDataBase(tDBHelper);
         }
+        */
         Cursor mCursor = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter = new TaskItemCursorAdapter(mCursor, R.layout.task_item, R.id.item_layout, true);
+        tA = new taskHandler(ctx,taskData, tDBHelper, adapter);
         //mRefreshLayout = (MySwipeRefreshLayout) this.findViewById(R.id.swipe_refresh_layout);
 
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
