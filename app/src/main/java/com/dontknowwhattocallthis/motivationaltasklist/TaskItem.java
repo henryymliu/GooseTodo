@@ -2,6 +2,7 @@ package com.dontknowwhattocallthis.motivationaltasklist;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
@@ -22,7 +23,10 @@ public class TaskItem {
     private Date currDate;
     private boolean usedate;
     private boolean usetime;
-    private long id = -1;
+    private static final long ID_NOT_SET = -1;
+    private static final long ORDER_NOT_SET = -1;
+    private long id = ID_NOT_SET;
+    private long order = ORDER_NOT_SET;
     private boolean isOverdue = false;
 
 
@@ -36,6 +40,7 @@ public class TaskItem {
     }
     public TaskItem(Cursor cursor){
         this.id = cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable._ID));
+        this.order = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_ORDER));
         this.title = cursor.getString(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE));
         this.duedate = new Date(cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP)));
         // Because Cursor doesn't support getBoolean for some reason
@@ -56,7 +61,9 @@ public class TaskItem {
     public String getTitle(){
         return this.title;
     }
-
+    public long getOrder(){
+        return this.order;
+    }
     public Date getDueDate(){
         return this.duedate;
     }
@@ -86,6 +93,7 @@ public class TaskItem {
     public ContentValues getContentValues(){
         ContentValues values = new ContentValues();
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE, this.title);
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_ORDER, this.order);
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP, this.duedate.getTime());
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME, this.usetime);
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE, this.usedate);
@@ -96,6 +104,11 @@ public class TaskItem {
     public void writeToDataBase(TaskDBHelper mDbHelper){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if(id < 0){
+            // if we haven't specified order, need to auto generate
+            if(this.order == this.ORDER_NOT_SET) {
+                long count = DatabaseUtils.queryNumEntries(db, TaskDBSchema.TaskTable.TABLE_NAME);
+                this.order = count;
+            }
             // new entry, put and update id
             this.id = db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
         }
@@ -117,6 +130,6 @@ public class TaskItem {
         int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
         // one and only one thing should have been deleted
         assert(count == 1);
-        this.id = -1;
+        this.id = this.ID_NOT_SET;
     }
 }

@@ -11,12 +11,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TaskDBHelper extends SQLiteOpenHelper{
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Task.db";
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + TaskDBSchema.TaskTable.TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + TaskDBSchema.TaskTable.TABLE_NAME + " (" +
                     TaskDBSchema.TaskTable._ID + " INTEGER PRIMARY KEY," +
+                    TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " INTEGER," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_TITLE + " TEXT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP + " BIGINT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE + " BIT," +

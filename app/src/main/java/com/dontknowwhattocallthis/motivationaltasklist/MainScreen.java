@@ -83,7 +83,7 @@ public class MainScreen extends AppCompatActivity {
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
 
 
-        /*
+
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
             public void onItemDragStarted(int position) {
@@ -94,9 +94,14 @@ public class MainScreen extends AppCompatActivity {
             public void onItemDragEnded(int fromPosition, int toPosition) {
                 if (fromPosition != toPosition) {
                     Toast.makeText(mDragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
+                    TaskItemSQL.moveOrderTaskItem(tDBHelper, (long)fromPosition, (long)toPosition);
+                    Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
+                    adapter.setCursor(c);
+                    adapter.notifyDataSetChanged();
                 }
             }
-        });*/
+        });
+
         mDragListView.setLayoutManager(new LinearLayoutManager(this));
         mDragListView.setAdapter(adapter, true);
         mDragListView.setCanDragHorizontally(false);

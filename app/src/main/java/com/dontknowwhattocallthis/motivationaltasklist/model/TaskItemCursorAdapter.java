@@ -68,7 +68,8 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         String text = mItemList.get(position).getTitle();
-        holder.mText.setText(text);
+        String order = String.valueOf(mItemList.get(position).getOrder());
+        holder.mText.setText(order.concat(text));
         holder.itemView.setTag(mItemList.get(position).getID());
 
         if (mItemList.get(position).hasDate()) { //date, no time
