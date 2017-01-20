@@ -2,6 +2,7 @@ package com.dontknowwhattocallthis.motivationaltasklist.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
@@ -67,12 +68,32 @@ public class TaskItemSQL {
         return count;
     }
 
+    //Given taskitem, inserts into database with given order
+    //Prereq: task has already defined order
+    //Params:
+    //      mDbHelper - Helper used to access database
+    //      task - TaskItem to insert to database
+    //Returns: ID assigned by database
+    public static Long insertTaskItem(TaskDBHelper mDbHelper, TaskItem task){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        assert(task.getOrder() != -1); //assert that order has already been assigned
+        db.execSQL("UPDATE " + TaskDBSchema.TaskTable.TABLE_NAME + " SET "
+                + TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " = " +
+                TaskDBSchema.TaskTable.COLUMN_NAME_ORDER +
+                " +1 WHERE " +
+                TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " >= " +
+                String.valueOf(task.getOrder()));
+        return db.insert(TaskDBSchema.TaskTable.TABLE_NAME,null,task.getContentValues());
+    }
+
+    //Removes taskitem from database given ID from list.
+    //Returns: TaskItem representing deleted task
     public static TaskItem deleteTaskItem(TaskDBHelper mDbHelper, long id){
-        //SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         String selection = TaskDBSchema.TaskTable._ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
-        /*System.out.println(id);
+        //System.out.println(id);
         Cursor dC = mDbHelper.getReadableDatabase().query(
                 TaskDBSchema.TaskTable.TABLE_NAME,
                 projection,
@@ -83,23 +104,29 @@ public class TaskItemSQL {
                 null
         );
         dC.moveToNext();
-        TaskItem deletedItem = new TaskItem(dC);*/
-        TaskItem deletedItem = getTaskItemAtPos(mDbHelper,id);
-        int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
+        TaskItem deletedItem = new TaskItem(dC);
+        Long delOrder = deletedItem.getOrder();
+
+        int count  = db.delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
         // one and only one thing should have been deleted
         assert(count == 1);
 
         //update database order
-        mDbHelper.getWritableDatabase().execSQL("UPDATE " + TaskDBSchema.TaskTable.TABLE_NAME + " SET "
+        db = mDbHelper.getWritableDatabase();
+        db.execSQL("UPDATE " + TaskDBSchema.TaskTable.TABLE_NAME + " SET "
                 + TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " = " +
                 TaskDBSchema.TaskTable.COLUMN_NAME_ORDER +
                 " -1 WHERE " +
-                TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + "> " +
-                String.valueOf(id));
+                TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " > " +
+                String.valueOf(delOrder));
 
         return deletedItem;
     }
 
+    //Updates ordering of tasks in database based on user-defined order.
+    //Params: mDbHelper -Helper used to access database
+    //          frompos - starting position of task in list before dragging
+    //          topos - final position of task in list after dragging
     public static void moveOrderTaskItem(TaskDBHelper mDbHelper, long frompos, long topos){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if(frompos < topos) {
@@ -170,6 +197,7 @@ public class TaskItemSQL {
         }
     }
 
+    //Returns TaskItem representing task at given position in list
     public static TaskItem getTaskItemAtPos(TaskDBHelper mDbHelper, long pos){
         String selection = TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " = ?";
         String[] selectionArgs = { String.valueOf(pos) };
@@ -184,6 +212,7 @@ public class TaskItemSQL {
                 null);
         dC.moveToNext();
         TaskItem item = new TaskItem(dC);
+        dC.close();
         return item;
     }
 }

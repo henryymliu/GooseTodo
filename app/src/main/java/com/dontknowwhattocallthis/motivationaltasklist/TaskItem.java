@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
 
@@ -110,7 +111,7 @@ public class TaskItem {
                 this.order = count;
             }
             // new entry, put and update id
-            this.id = db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
+            this.id = TaskItemSQL.insertTaskItem(mDbHelper,this);//db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
         }
         else{
             String selection = TaskDBSchema.TaskTable._ID + " = ?";
@@ -124,12 +125,9 @@ public class TaskItem {
         }
     }
 
-    public void deleteFromDataBase(TaskDBHelper mDbHelper){
-        String selection = TaskDBSchema.TaskTable._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(this.id) };
-        //int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
-        // one and only one thing should have been deleted
-        //assert(count == 1);
+    //Removes ID from TaskItem to represent that it is no longer in the database
+    public void invalidateIDFromDataBase(){
+
         this.id = this.ID_NOT_SET;
     }
 }

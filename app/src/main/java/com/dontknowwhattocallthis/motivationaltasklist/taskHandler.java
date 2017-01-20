@@ -209,23 +209,30 @@ public class taskHandler {
         Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter.setCursor(c);
         adapter.notifyDataSetChanged();
+        c.close();
 
     }
 
     //Removes task and stores it in undo field; deletes from database
     public void updateRemoveData(Long pos){
         undoTask = TaskItemSQL.deleteTaskItem(tDBHelper,pos);
-        undoTask.deleteFromDataBase(tDBHelper);
+        undoTask.invalidateIDFromDataBase();
         Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter.setCursor(c);
         adapter.notifyDataSetChanged();
+        c.close();
 
     }
 
     //Restores recently deleted task to list
     public void addUndoTask(){
         assert(undoTask != null);
-        updateAddData(undoTask);
+        //TaskItemSQL.insertTaskItem(tDBHelper, undoTask);
+        undoTask.writeToDataBase(tDBHelper);
+        Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
+        adapter.setCursor(c);
+        adapter.notifyDataSetChanged();
+        c.close();
     }
 
 }

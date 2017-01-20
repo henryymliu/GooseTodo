@@ -69,8 +69,8 @@ public class MainScreen extends AppCompatActivity {
             taskData.add(temp);
             temp.writeToDataBase(tDBHelper);
         }
-
         */
+
         Cursor mCursor = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter = new TaskItemCursorAdapter(mCursor, R.layout.task_item, R.id.item_layout, true);
         tA = new taskHandler(ctx,taskData, tDBHelper, adapter);
@@ -79,8 +79,7 @@ public class MainScreen extends AppCompatActivity {
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
 
-
-
+        /*
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
             public void onItemDragStarted(int position) {
@@ -95,14 +94,16 @@ public class MainScreen extends AppCompatActivity {
                     Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
                     adapter.setCursor(c);
                     adapter.notifyDataSetChanged();
+                    c.close();
                 }
             }
-        });
+        });*/
 
         mDragListView.setLayoutManager(new LinearLayoutManager(this));
         mDragListView.setAdapter(adapter, true);
         mDragListView.setCanDragHorizontally(false);
         mDragListView.setCustomDragItem(null);
+        mCursor.close();
 
     }
 
@@ -119,7 +120,6 @@ public class MainScreen extends AppCompatActivity {
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: restore undo item to original position
                             tA.addUndoTask();
                             //tA.updateAddData();
                         }
