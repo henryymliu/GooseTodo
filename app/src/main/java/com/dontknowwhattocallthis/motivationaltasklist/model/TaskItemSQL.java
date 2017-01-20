@@ -68,24 +68,35 @@ public class TaskItemSQL {
     }
 
     public static TaskItem deleteTaskItem(TaskDBHelper mDbHelper, long id){
+        //SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
         String selection = TaskDBSchema.TaskTable._ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
-        String sortOrder =
-                TaskDBSchema.TaskTable._ID + " ASC";
-        //System.out.println(id);
+        /*System.out.println(id);
         Cursor dC = mDbHelper.getReadableDatabase().query(
                 TaskDBSchema.TaskTable.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
-        null,
-        null,
-        null);
+                null,
+                null,
+                null
+        );
         dC.moveToNext();
-        TaskItem deletedItem = new TaskItem(dC);
+        TaskItem deletedItem = new TaskItem(dC);*/
+        TaskItem deletedItem = getTaskItemAtPos(mDbHelper,id);
         int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
         // one and only one thing should have been deleted
         assert(count == 1);
+
+        //update database order
+        mDbHelper.getWritableDatabase().execSQL("UPDATE " + TaskDBSchema.TaskTable.TABLE_NAME + " SET "
+                + TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " = " +
+                TaskDBSchema.TaskTable.COLUMN_NAME_ORDER +
+                " -1 WHERE " +
+                TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + "> " +
+                String.valueOf(id));
+
         return deletedItem;
     }
 

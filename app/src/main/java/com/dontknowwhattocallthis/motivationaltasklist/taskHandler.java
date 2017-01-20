@@ -6,11 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
 import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
@@ -47,7 +48,7 @@ public class taskHandler {
         // final String taskName;
         //String taskDate = "jsdflkj"
         task = new TaskItem();
-        AlertDialog.Builder getTaskTitleBuilder = new AlertDialog.Builder(ctx);
+        final AlertDialog.Builder getTaskTitleBuilder = new AlertDialog.Builder(ctx);
         getTaskTitleBuilder.setTitle("Create new task");
 
         //create text field
@@ -81,7 +82,35 @@ public class taskHandler {
                 dialog.dismiss();
             }
         });
-        getTaskTitleBuilder.show();
+        final AlertDialog getTaskTitleDialog = getTaskTitleBuilder.create();
+        getTaskTitleDialog.show();
+        getTaskTitleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        getTaskTitleDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(false);
+
+        //do not allow empty task names
+        titleInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().trim().length() == 0){
+                    getTaskTitleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    getTaskTitleDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(false);
+                }
+                else{
+                    getTaskTitleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    getTaskTitleDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     //Launches datepicker dialog to select task date

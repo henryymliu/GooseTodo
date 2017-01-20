@@ -127,9 +127,9 @@ public class TaskItem {
     public void deleteFromDataBase(TaskDBHelper mDbHelper){
         String selection = TaskDBSchema.TaskTable._ID + " = ?";
         String[] selectionArgs = { String.valueOf(this.id) };
-        int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
+        //int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
         // one and only one thing should have been deleted
-        assert(count == 1);
+        //assert(count == 1);
         this.id = this.ID_NOT_SET;
     }
 }

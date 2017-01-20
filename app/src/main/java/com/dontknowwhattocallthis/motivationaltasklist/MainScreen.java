@@ -57,9 +57,6 @@ public class MainScreen extends AppCompatActivity {
         });
         //add listeners
 
-
-
-
         //create test data
         /*
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
@@ -148,7 +145,7 @@ public class MainScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_screen, menu);
-        return true;
+        return false; //disable menu for now
     }
 
     @Override
@@ -157,7 +154,7 @@ public class MainScreen extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        //TODO: Implement sorting and possibly settings
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort) {
             return true;
