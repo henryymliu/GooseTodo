@@ -122,7 +122,7 @@ public class MainScreen extends AppCompatActivity {
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: Implement undo item field
+                            //TODO: restore undo item to original position
                             tA.addUndoTask();
                             //tA.updateAddData();
                         }
@@ -159,7 +159,7 @@ public class MainScreen extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sort) {
             return true;
         }
 
