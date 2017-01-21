@@ -111,7 +111,8 @@ public class TaskItem {
                 this.order = count;
             }
             // new entry, put and update id
-            this.id = TaskItemSQL.insertTaskItem(mDbHelper,this);//db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
+            this.id = TaskItemSQL.insertTaskItem(mDbHelper,this);
+            //this.id = db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
         }
         else{
             String selection = TaskDBSchema.TaskTable._ID + " = ?";

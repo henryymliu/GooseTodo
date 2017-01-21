@@ -79,17 +79,17 @@ public class MainScreen extends AppCompatActivity {
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
 
-        /*
+
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
             public void onItemDragStarted(int position) {
-                Toast.makeText(mDragListView.getContext(), "Start - position: " + position, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(mDragListView.getContext(), "Start - position: " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onItemDragEnded(int fromPosition, int toPosition) {
                 if (fromPosition != toPosition) {
-                    Toast.makeText(mDragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(mDragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
                     TaskItemSQL.moveOrderTaskItem(tDBHelper, (long)fromPosition, (long)toPosition);
                     Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
                     adapter.setCursor(c);
@@ -97,7 +97,7 @@ public class MainScreen extends AppCompatActivity {
                     c.close();
                 }
             }
-        });*/
+        });
 
         mDragListView.setLayoutManager(new LinearLayoutManager(this));
         mDragListView.setAdapter(adapter, true);
