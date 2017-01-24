@@ -3,10 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.dontknowwhattocallthis.motivationaltasklist.MainScreen"
     >
-
     <item
-        android:id="@+id/action_settings"
+        android:id = "@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title = "@string/action_settings"
+        app:showAsAction = "never" />
+    <item
+        android:id="@+id/action_sort"
+        android:orderInCategory="100"
+        android:title="Sort by"
+        app:showAsAction="never" >
+        <menu>
+            <item
+                android:id="@+id/sort_byDate"
+                android:orderInCategory = "100"
+                android:title="Date"
+                app:showAsAction = "never" />
+            <item
+                android:id = "@+id/sort_byName"
+                android:orderInCategory = "200"
+                android:title="Name"
+                app:showAsAction = "never" />
+        </menu>
+    </item>
 </menu>

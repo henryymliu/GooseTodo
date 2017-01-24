@@ -6,15 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dontknowwhattocallthis.motivationaltasklist.R;
 import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
-import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Cheng on 03/01/2017
@@ -67,20 +66,26 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        String text = mItemList.get(position).getTitle();
-        holder.mText.setText(text);
-        holder.itemView.setTag(mItemList.get(position).getID());
+        TaskItem currTask = mItemList.get(position);
+        //TaskItem.currDate = Calendar.getInstance().getTime();
+        currTask.checkIfOverdue();
+        String text = currTask.getTitle();
+        String order = String.valueOf(currTask.getOrder());
+        holder.mText.setText(order.concat(text));
+        //holder.mText.setText(text);
 
-        if (mItemList.get(position).hasDate()) { //date, no time
+        holder.itemView.setTag(currTask.getID());
+
+        if (currTask.hasDate()) { //date, no time
             DateFormat dF = DateFormat.getDateInstance(DateFormat.LONG);
 
             StringBuilder stringDate = new StringBuilder();
-            stringDate.append(dF.format(mItemList.get(position).getDueDate()));
-            if(mItemList.get(position).hasTime()){ //date and time
+            stringDate.append(dF.format(currTask.getDueDate()));
+            if(currTask.hasTime()){ //date and time
                 DateFormat tF = DateFormat.getTimeInstance(DateFormat.SHORT);
-                stringDate.append(", " + tF.format(mItemList.get(position).getDueDate())); //maybe adjust this
+                stringDate.append(", " + tF.format(currTask.getDueDate())); //maybe adjust this
             }
-            if(mItemList.get(position).isOverdue()){ //TODO: update current time
+            if(currTask.isOverdue()){
                 holder.dateText.setTextColor(Color.RED);
             }
             holder.dateText.setText(stringDate.toString());

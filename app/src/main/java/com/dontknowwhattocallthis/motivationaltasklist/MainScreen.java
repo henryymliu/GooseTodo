@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +32,7 @@ public class MainScreen extends AppCompatActivity {
     private DragListView mDragListView;
 
     taskHandler tA;
-    private TaskItem undoTask;
+
 
 
     @Override
@@ -57,9 +59,6 @@ public class MainScreen extends AppCompatActivity {
         });
         //add listeners
 
-
-
-
         //create test data
         /*
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
@@ -72,8 +71,8 @@ public class MainScreen extends AppCompatActivity {
             taskData.add(temp);
             temp.writeToDataBase(tDBHelper);
         }
-
         */
+
         Cursor mCursor = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter = new TaskItemCursorAdapter(mCursor, R.layout.task_item, R.id.item_layout, true);
         tA = new taskHandler(ctx,taskData, tDBHelper, adapter);
@@ -82,25 +81,36 @@ public class MainScreen extends AppCompatActivity {
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
 
-
-        /*
+        //handle reordering
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
             public void onItemDragStarted(int position) {
-                Toast.makeText(mDragListView.getContext(), "Start - position: " + position, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(mDragListView.getContext(), "Start - position: " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onItemDragEnded(int fromPosition, int toPosition) {
                 if (fromPosition != toPosition) {
-                    Toast.makeText(mDragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(mDragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
+                    TaskItemSQL.moveOrderTaskItem(tDBHelper, (long)fromPosition, (long)toPosition);
+                    Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
+                    adapter.setCursor(c);
+                    adapter.notifyDataSetChanged();
+                    c.close();
                 }
             }
-        });*/
+        });
+
         mDragListView.setLayoutManager(new LinearLayoutManager(this));
         mDragListView.setAdapter(adapter, true);
         mDragListView.setCanDragHorizontally(false);
         mDragListView.setCustomDragItem(null);
+
+        //add separator between tasks
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(mDragListView.getContext(), new LinearLayoutManager(this).getOrientation());
+        mDragListView.getRecyclerView().addItemDecoration(dividerItemDecoration);
+
+        mCursor.close();
 
     }
 
@@ -111,17 +121,18 @@ public class MainScreen extends AppCompatActivity {
             //potential hack
             //Get tag of parent layout
             Long pos = (Long) ((ViewGroup) v.getParent()).getTag();
+            tA.updateRemoveData(pos);
 
-
-            Snackbar.make(v, "Task completed!", Snackbar.LENGTH_LONG)
+            Snackbar.make(findViewById(R.id.content_main_screen), "Task completed!", Snackbar.LENGTH_LONG)
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: Implement undo item field
+                            tA.addUndoTask();
+                            //tA.updateAddData();
                         }
                     }).show();
-            tA.updateRemoveData(pos);
-            adapter.notifyDataSetChanged();
+
+            //adapter.notifyDataSetChanged();
             // warning: hack that functionally works but looks terrible
             ((CheckBox) v).setChecked(false);
             //lv.invalidateViews();
@@ -141,7 +152,7 @@ public class MainScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_screen, menu);
-        return true;
+        return false; //disable menu for now
     }
 
     @Override
@@ -150,9 +161,9 @@ public class MainScreen extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        //TODO: Implement sorting and possibly settings
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sort) {
             return true;
         }
 

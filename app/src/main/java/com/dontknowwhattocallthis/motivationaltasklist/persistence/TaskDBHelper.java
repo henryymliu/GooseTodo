@@ -2,7 +2,7 @@ package com.dontknowwhattocallthis.motivationaltasklist.persistence;
 
 /**
  * Created by Cheng on 03/01/2017.
- * TaskDBHelper raps SQLiteOpenHelper and should be used to make read and write
+ * TaskDBHelper wraps SQLiteOpenHelper and should be used to make read and write
  */
 
 import android.content.Context;
@@ -13,10 +13,10 @@ public class TaskDBHelper extends SQLiteOpenHelper{
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Task.db";
-
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + TaskDBSchema.TaskTable.TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + TaskDBSchema.TaskTable.TABLE_NAME + " (" +
                     TaskDBSchema.TaskTable._ID + " INTEGER PRIMARY KEY," +
+                    TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " INTEGER," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_TITLE + " TEXT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP + " BIGINT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE + " BIT," +

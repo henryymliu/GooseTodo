@@ -2,8 +2,10 @@ package com.dontknowwhattocallthis.motivationaltasklist;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
 import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
 
@@ -15,65 +17,68 @@ import java.util.Date;
  */
 
 public class TaskItem {
-    private String title;
+    public static Date currDate;
 
-    //private Calendar taskDueDate;
-    private Date duedate = Calendar.getInstance().getTime();
-    private Date currDate;
-    private boolean usedate;
-    private boolean usetime;
-    private long id = -1;
+    private String title;
+    private Date dueDate = Calendar.getInstance().getTime();
+    private boolean useDate;
+    private boolean useTime;
     private boolean isOverdue = false;
+
+    public static final long TASK_ID_NOT_SET = -1;
+    public static final long TASK_ORDER_NOT_SET = -1;
+    private long id = TASK_ID_NOT_SET;
+    private long order = TASK_ORDER_NOT_SET;
+
 
 
     public TaskItem(){}
 
     public TaskItem(String name, Long millis, boolean ud, boolean ut){
         this.title = name;
-        this.duedate = new Date(millis);
-        this.usedate = ud;
-        this.usetime = ut;
+        this.dueDate = new Date(millis);
+        this.useDate = ud;
+        this.useTime = ut;
     }
     public TaskItem(Cursor cursor){
         this.id = cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable._ID));
+        this.order = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_ORDER));
         this.title = cursor.getString(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE));
-        this.duedate = new Date(cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP)));
+        this.dueDate = new Date(cursor.getLong(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP)));
         // Because Cursor doesn't support getBoolean for some reason
 
-        this.usedate = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE))==1;
-        this.usetime = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME))==1;
-        this.currDate = Calendar.getInstance().getTime();
-        if(usedate) {
-            assert(duedate != null);
-            //check if task overdue
-            if(this.currDate.compareTo(this.duedate) > 0){
-                this.isOverdue = true;
-            }
-        }
+        this.useDate = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE))==1;
+        this.useTime = cursor.getInt(cursor.getColumnIndex(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME))==1;
+        TaskItem.currDate = Calendar.getInstance().getTime();
+
+        checkIfOverdue();
 
     }
     //bunch o' getters n' setters
     public String getTitle(){
         return this.title;
     }
-
-    public Date getDueDate(){
-        return this.duedate;
+    public long getOrder(){
+        return this.order;
     }
-    public boolean  hasDate(){return this.usedate;}
-    public boolean hasTime(){return this.usetime;}
+    public void setOrder(long o){this.order = o;};
+    public Date getDueDate(){
+        return this.dueDate;
+    }
+    public boolean  hasDate(){return this.useDate;}
+    public boolean hasTime(){return this.useTime;}
     public boolean isOverdue(){return this.isOverdue;}
-    public void setName(String newTitle){
+    public void setTitle(String newTitle){
         this.title = newTitle;
     }
     public void setDate(Date newDate){
-        this.duedate = newDate;
+        this.dueDate = newDate;
     }
     public void setUseDate(boolean d){
-        this.usedate = d;
+        this.useDate = d;
     }
     public void setUseTime(boolean t){
-        this.usetime =t;
+        this.useTime =t;
     }
 
     public long getID() {
@@ -86,9 +91,10 @@ public class TaskItem {
     public ContentValues getContentValues(){
         ContentValues values = new ContentValues();
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TITLE, this.title);
-        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP, this.duedate.getTime());
-        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME, this.usetime);
-        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE, this.usedate);
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_ORDER, this.order);
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP, this.dueDate.getTime());
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME, this.useTime);
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE, this.useDate);
 
         return values;
     }
@@ -96,8 +102,14 @@ public class TaskItem {
     public void writeToDataBase(TaskDBHelper mDbHelper){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if(id < 0){
+            // if we haven't specified order, need to auto generate
+            if(this.order == this.TASK_ORDER_NOT_SET) {
+                long count = DatabaseUtils.queryNumEntries(db, TaskDBSchema.TaskTable.TABLE_NAME);
+                this.order = count;
+            }
             // new entry, put and update id
-            this.id = db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
+            this.id = TaskItemSQL.insertTaskItem(mDbHelper,this);
+            //this.id = db.insert(TaskDBSchema.TaskTable.TABLE_NAME, null, this.getContentValues());
         }
         else{
             String selection = TaskDBSchema.TaskTable._ID + " = ?";
@@ -111,12 +123,19 @@ public class TaskItem {
         }
     }
 
-    public void deleteFromDataBase(TaskDBHelper mDbHelper){
-        String selection = TaskDBSchema.TaskTable._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(this.id) };
-        int count  = mDbHelper.getWritableDatabase().delete(TaskDBSchema.TaskTable.TABLE_NAME, selection, selectionArgs);
-        // one and only one thing should have been deleted
-        assert(count == 1);
-        this.id = -1;
+    //Removes ID from TaskItem to represent that it is no longer in the database
+    public void invalidateIDFromDataBase(){
+
+        this.id = this.TASK_ID_NOT_SET;
+    }
+    public void checkIfOverdue(){
+        currDate = Calendar.getInstance().getTime();
+        if(useDate) {
+            assert(dueDate != null);
+            //check if task overdue
+            if(this.currDate.compareTo(this.dueDate) > 0){
+                this.isOverdue = true;
+            }
+        }
     }
 }
