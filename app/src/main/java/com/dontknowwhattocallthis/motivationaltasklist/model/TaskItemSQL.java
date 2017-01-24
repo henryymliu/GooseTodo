@@ -76,6 +76,7 @@ public class TaskItemSQL {
     //Returns: ID assigned by database
     public static Long insertTaskItem(TaskDBHelper mDbHelper, TaskItem task){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
         assert(task.getOrder() != -1); //assert that order has already been assigned
         db.execSQL("UPDATE " + TaskDBSchema.TaskTable.TABLE_NAME + " SET "
                 + TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " = " +

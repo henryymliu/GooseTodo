@@ -32,7 +32,7 @@ public class taskHandler {
     private ArrayList<TaskItem> taskData;
     private TaskItemCursorAdapter adapter;
     private TaskDBHelper tDBHelper;
-    private Calendar currCal = Calendar.getInstance();
+    private Calendar currCal;
     private TaskItem undoTask;
 
     public taskHandler(Context ctx, ArrayList<TaskItem> taskData, TaskDBHelper tDB, TaskItemCursorAdapter adapter){
@@ -48,6 +48,7 @@ public class taskHandler {
         // final String taskName;
         //String taskDate = "jsdflkj"
         task = new TaskItem();
+        currCal= Calendar.getInstance();
         final AlertDialog.Builder getTaskTitleBuilder = new AlertDialog.Builder(ctx);
         getTaskTitleBuilder.setTitle("Create new task");
 
@@ -57,11 +58,11 @@ public class taskHandler {
         titleInput.setHint("Feed the cat");
         //set view in dialog box
         getTaskTitleBuilder.setView(titleInput);
-        getTaskTitleBuilder.setPositiveButton("Select date", new DialogInterface.OnClickListener(){
+        getTaskTitleBuilder.setNeutralButton("Select date", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int id){
                 String taskName = titleInput.getText().toString();
-                task.setName(taskName);
+                task.setTitle(taskName);
                 setTaskDate();
                 dialog.dismiss();
             }
@@ -72,11 +73,11 @@ public class taskHandler {
                 dialog.cancel();
             }
         });
-        getTaskTitleBuilder.setNeutralButton("Create", new DialogInterface.OnClickListener(){
+        getTaskTitleBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int id){
                 String taskName = titleInput.getText().toString();
-                task.setName(taskName);
+                task.setTitle(taskName);
                 task.setUseDate(false);task.setUseTime(false);
                 updateAddData(task);
                 dialog.dismiss();
@@ -123,7 +124,7 @@ public class taskHandler {
 
         final DatePickerDialog dpDialog = new DatePickerDialog(ctx,null,cYear,cMonth,cDay);
         dpDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
-        dpDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Select time", new DialogInterface.OnClickListener() {
+        dpDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Select time", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -145,7 +146,7 @@ public class taskHandler {
 
             }
         });
-        dpDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
+        dpDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -184,32 +185,10 @@ public class taskHandler {
 
     //Adds a task to database and notifies adapter
     private void updateAddData(TaskItem t) {
-        /*
-        HashMap<String, String> newTask = new HashMap<String, String>(2);
-        newTask.put("task", task.getTitle());
 
-        if (task.hasDate()) { //date, no time
-            DateFormat dF = DateFormat.getDateInstance(DateFormat.LONG);
-
-            StringBuilder stringDate = new StringBuilder();
-            stringDate.append(dF.format(task.getDueDate()));
-            if(task.hasTime()){ //date and time
-                DateFormat tF = DateFormat.getTimeInstance(DateFormat.SHORT);
-                stringDate.append(", " + tF.format(task.getDueDate())); //maybe adjust this
-            }
-            newTask.put("date", stringDate.toString());
-        }
-
-        else { //task name only
-            newTask.put("date", "");
-        }
-        */
         taskData.add(t);
         t.writeToDataBase(tDBHelper);
-        Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
-        adapter.setCursor(c);
-        adapter.notifyDataSetChanged();
-        c.close();
+        updateAdapter();
 
     }
 
@@ -217,11 +196,7 @@ public class taskHandler {
     public void updateRemoveData(Long pos){
         undoTask = TaskItemSQL.deleteTaskItem(tDBHelper,pos);
         undoTask.invalidateIDFromDataBase();
-        Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
-        adapter.setCursor(c);
-        adapter.notifyDataSetChanged();
-        c.close();
-
+        updateAdapter();
     }
 
     //Restores recently deleted task to list
@@ -229,6 +204,12 @@ public class taskHandler {
         assert(undoTask != null);
         //TaskItemSQL.insertTaskItem(tDBHelper, undoTask);
         undoTask.writeToDataBase(tDBHelper);
+        updateAdapter();
+    }
+
+    //updates adapter with new dataset, updates TaskItem current date
+    public void updateAdapter(){
+        //TaskItem.currDate = Calendar.getInstance().getTime();
         Cursor c = TaskItemSQL.getAllTaskItems(tDBHelper);
         adapter.setCursor(c);
         adapter.notifyDataSetChanged();

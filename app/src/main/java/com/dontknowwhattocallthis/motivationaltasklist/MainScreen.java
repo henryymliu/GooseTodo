@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,7 +81,7 @@ public class MainScreen extends AppCompatActivity {
         mDragListView = (DragListView) this.findViewById(R.id.list_tasks);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
 
-
+        //handle reordering
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
             public void onItemDragStarted(int position) {
@@ -103,6 +105,11 @@ public class MainScreen extends AppCompatActivity {
         mDragListView.setAdapter(adapter, true);
         mDragListView.setCanDragHorizontally(false);
         mDragListView.setCustomDragItem(null);
+
+        //add separator between tasks
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(mDragListView.getContext(), new LinearLayoutManager(this).getOrientation());
+        mDragListView.getRecyclerView().addItemDecoration(dividerItemDecoration);
+
         mCursor.close();
 
     }
@@ -125,7 +132,7 @@ public class MainScreen extends AppCompatActivity {
                         }
                     }).show();
 
-            adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
             // warning: hack that functionally works but looks terrible
             ((CheckBox) v).setChecked(false);
             //lv.invalidateViews();
