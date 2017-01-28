@@ -50,15 +50,15 @@ public class taskHandler {
         task = new TaskItem();
         currCal= Calendar.getInstance();
         final AlertDialog.Builder getTaskTitleBuilder = new AlertDialog.Builder(ctx);
-        getTaskTitleBuilder.setTitle("Create new task");
+        getTaskTitleBuilder.setTitle(ctx.getString(R.string.addTask_DIALOG_TITLE));
 
         //create text field
         final EditText titleInput = new EditText(ctx);
         titleInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        titleInput.setHint("Feed the cat");
+        titleInput.setHint(ctx.getString(R.string.addTask_taskTextHint));
         //set view in dialog box
         getTaskTitleBuilder.setView(titleInput);
-        getTaskTitleBuilder.setNeutralButton("Select date", new DialogInterface.OnClickListener(){
+        getTaskTitleBuilder.setNeutralButton(ctx.getString(R.string.addTask_ADDDATE), new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int id){
                 String taskName = titleInput.getText().toString();
@@ -67,13 +67,13 @@ public class taskHandler {
                 dialog.dismiss();
             }
         });
-        getTaskTitleBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+        getTaskTitleBuilder.setNegativeButton(ctx.getString(android.R.string.cancel), new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int id){
                 dialog.cancel();
             }
         });
-        getTaskTitleBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener(){
+        getTaskTitleBuilder.setPositiveButton(ctx.getString(R.string.addTask_CREATE), new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int id){
                 String taskName = titleInput.getText().toString();
@@ -124,7 +124,7 @@ public class taskHandler {
 
         final DatePickerDialog dpDialog = new DatePickerDialog(ctx,null,cYear,cMonth,cDay);
         dpDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
-        dpDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Select time", new DialogInterface.OnClickListener() {
+        dpDialog.setButton(DialogInterface.BUTTON_NEUTRAL, ctx.getString(R.string.addTask_ADDTIME), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -139,14 +139,14 @@ public class taskHandler {
 
             }
         });
-        dpDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+        dpDialog.setButton(DialogInterface.BUTTON_NEGATIVE, ctx.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
 
             }
         });
-        dpDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Create", new DialogInterface.OnClickListener() {
+        dpDialog.setButton(DialogInterface.BUTTON_POSITIVE, ctx.getString(R.string.addTask_CREATE), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

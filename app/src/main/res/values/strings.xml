@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Tasks</string>
     <string name="action_settings">Settings</string>
+    <string name = "addTask_taskTextHint">Feed the cat</string>
+    <string name = "addTask_CREATE">Create</string>
+    <string name = "addTask_ADDDATE">Select date</string>
+    <string name = "addTask_ADDTIME">Select time</string>
+    <string name = "addTask_DIALOG_TITLE">Create new task</string>
+    <string name = "completedTaskSnackbar">Task Completed!</string>
+    <string name = "Undo">Undo</string>
 </resources>

@@ -123,8 +123,8 @@ public class MainScreen extends AppCompatActivity {
             Long pos = (Long) ((ViewGroup) v.getParent()).getTag();
             tA.updateRemoveData(pos);
 
-            Snackbar.make(findViewById(R.id.content_main_screen), "Task completed!", Snackbar.LENGTH_LONG)
-                    .setAction("Undo", new View.OnClickListener() {
+            Snackbar.make(findViewById(R.id.content_main_screen), getString(R.string.completedTaskSnackbar), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.Undo), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             tA.addUndoTask();

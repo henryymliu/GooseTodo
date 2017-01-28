@@ -71,8 +71,8 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
         currTask.checkIfOverdue();
         String text = currTask.getTitle();
         String order = String.valueOf(currTask.getOrder());
-        holder.mText.setText(order.concat(text));
-        //holder.mText.setText(text);
+        //holder.mText.setText(order.concat(text));
+        holder.mText.setText(text);
 
         holder.itemView.setTag(currTask.getID());
 
