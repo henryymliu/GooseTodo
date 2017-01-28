@@ -57,14 +57,14 @@ public class MainScreen extends AppCompatActivity {
             }
         });
         //add listeners
-
         //create test data
         /*
+
         String[] testData = {"Feed tiger", "Study", "Buy shrubberies"};
         Long[] testDataDates = {1484087306912L,1484087306912L,1484089306912L};
         Boolean[] testDataDateBool = {false, true, true};
         Boolean[] testDataTimeBool = {false, false, true};
-        for(int i = 0;i < testData.length;i++){
+        for(int i = 0;i < testData.length;i++){ 
             TaskItem temp = new TaskItem(testData[i],testDataDates[i],testDataDateBool[i],testDataTimeBool[i]);
 
             taskData.add(temp);
