@@ -1,13 +1,13 @@
-package com.dontknowwhattocallthis.motivationaltasklist;
+package com.HCInfinity.tasks;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
-import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
-import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
+import com.HCInfinity.tasks.model.TaskItemSQL;
+import com.HCInfinity.tasks.persistence.TaskDBHelper;
+import com.HCInfinity.tasks.persistence.TaskDBSchema;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -61,7 +61,7 @@ public class TaskItem {
     public long getOrder(){
         return this.order;
     }
-    public void setOrder(long o){this.order = o;};
+    public void setOrder(long o){this.order = o;}
     public Date getDueDate(){
         return this.dueDate;
     }
@@ -103,7 +103,7 @@ public class TaskItem {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if(id < 0){
             // if we haven't specified order, need to auto generate
-            if(this.order == this.TASK_ORDER_NOT_SET) {
+            if(this.order == TASK_ORDER_NOT_SET) {
                 long count = DatabaseUtils.queryNumEntries(db, TaskDBSchema.TaskTable.TABLE_NAME);
                 this.order = count;
             }
@@ -126,14 +126,14 @@ public class TaskItem {
     //Removes ID from TaskItem to represent that it is no longer in the database
     public void invalidateIDFromDataBase(){
 
-        this.id = this.TASK_ID_NOT_SET;
+        this.id = TASK_ID_NOT_SET;
     }
     public void checkIfOverdue(){
         currDate = Calendar.getInstance().getTime();
         if(useDate) {
             assert(dueDate != null);
             //check if task overdue
-            if(this.currDate.compareTo(this.dueDate) > 0){
+            if(currDate.compareTo(this.dueDate) > 0){
                 this.isOverdue = true;
             }
         }

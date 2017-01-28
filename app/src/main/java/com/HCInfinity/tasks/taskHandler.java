@@ -1,4 +1,4 @@
-package com.dontknowwhattocallthis.motivationaltasklist;
+package com.HCInfinity.tasks;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -13,9 +13,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
-import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
-import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
+import com.HCInfinity.tasks.model.TaskItemCursorAdapter;
+import com.HCInfinity.tasks.model.TaskItemSQL;
+import com.HCInfinity.tasks.persistence.TaskDBHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;

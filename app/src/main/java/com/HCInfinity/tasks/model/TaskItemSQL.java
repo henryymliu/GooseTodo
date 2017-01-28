@@ -1,13 +1,12 @@
-package com.dontknowwhattocallthis.motivationaltasklist.model;
+package com.HCInfinity.tasks.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
-import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
-import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBSchema;
+import com.HCInfinity.tasks.TaskItem;
+import com.HCInfinity.tasks.persistence.TaskDBHelper;
+import com.HCInfinity.tasks.persistence.TaskDBSchema;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -120,7 +119,7 @@ public class TaskItemSQL {
                 " -1 WHERE " +
                 TaskDBSchema.TaskTable.COLUMN_NAME_ORDER + " > " +
                 String.valueOf(delOrder));
-
+        dC.close();
         return deletedItem;
     }
 

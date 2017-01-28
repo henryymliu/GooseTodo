@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id = "@+id/task_item_task_desc"
-    android:textAppearance="?android:textAppearanceLarge"
+    android:textAppearance="?android:textAppearanceMedium"
     android:text = "TEST"
     android:layout_toRightOf="@id/taskCheckBox" />
 
@@ -28,7 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id = "@+id/task_item_task_date"
-    android:textAppearance="?android:textAppearanceMedium"
+    android:textAppearance="?android:textAppearanceSmall"
     android:text = "TEST"
     android:layout_below="@id/task_item_task_desc"
     android:layout_toRightOf="@id/taskCheckBox" />

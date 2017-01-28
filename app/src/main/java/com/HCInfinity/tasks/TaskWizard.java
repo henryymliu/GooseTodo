@@ -1,4 +1,4 @@
-package com.dontknowwhattocallthis.motivationaltasklist;
+package com.HCInfinity.tasks;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

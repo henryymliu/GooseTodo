@@ -1,4 +1,4 @@
-package com.dontknowwhattocallthis.motivationaltasklist.model;
+package com.HCInfinity.tasks.model;
 
 import android.database.Cursor;
 import android.graphics.Color;
@@ -7,13 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dontknowwhattocallthis.motivationaltasklist.R;
-import com.dontknowwhattocallthis.motivationaltasklist.TaskItem;
+import com.HCInfinity.tasks.R;
+import com.HCInfinity.tasks.TaskItem;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Cheng on 03/01/2017
@@ -38,7 +37,7 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
     }
 
     private ArrayList<TaskItem> parseCursor(Cursor mCursor){
-        ArrayList<TaskItem> newList = new ArrayList<TaskItem>();
+        ArrayList<TaskItem> newList = new ArrayList<>();
         try{
             while(mCursor.moveToNext()){
                 TaskItem temp = new TaskItem(mCursor);
@@ -83,7 +82,7 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
             stringDate.append(dF.format(currTask.getDueDate()));
             if(currTask.hasTime()){ //date and time
                 DateFormat tF = DateFormat.getTimeInstance(DateFormat.SHORT);
-                stringDate.append(", " + tF.format(currTask.getDueDate())); //maybe adjust this
+                stringDate.append(", ").append(tF.format(currTask.getDueDate())); //maybe adjust this
             }
             if(currTask.isOverdue()){
                 holder.dateText.setTextColor(Color.RED);

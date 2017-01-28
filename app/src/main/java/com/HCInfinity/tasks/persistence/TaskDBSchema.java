@@ -1,4 +1,4 @@
-package com.dontknowwhattocallthis.motivationaltasklist.persistence;
+package com.HCInfinity.tasks.persistence;
 
 import android.provider.BaseColumns;
 

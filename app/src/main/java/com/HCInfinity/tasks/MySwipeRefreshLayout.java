@@ -1,4 +1,4 @@
-    package com.dontknowwhattocallthis.motivationaltasklist;
+    package com.HCInfinity.tasks;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;

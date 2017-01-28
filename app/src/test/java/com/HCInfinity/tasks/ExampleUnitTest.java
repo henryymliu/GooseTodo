@@ -1,4 +1,4 @@
-package com.dontknowwhattocallthis.motivationaltasklist;
+package com.HCInfinity.tasks;
 
 import org.junit.Test;
 

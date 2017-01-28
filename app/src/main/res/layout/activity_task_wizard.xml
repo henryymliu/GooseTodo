@@ -5,6 +5,6 @@
     android:id="@+id/activity_task_wizard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dontknowwhattocallthis.motivationaltasklist.TaskWizard">
+    tools:context="com.HCInfinity.tasks.TaskWizard">
 
 </LinearLayout>

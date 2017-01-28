@@ -1,4 +1,4 @@
-package com.dontknowwhattocallthis.motivationaltasklist.persistence;
+package com.HCInfinity.tasks.persistence;
 
 /**
  * Created by Cheng on 03/01/2017.

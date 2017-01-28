@@ -1,4 +1,4 @@
-package com.dontknowwhattocallthis.motivationaltasklist;
+package com.HCInfinity.tasks;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,17 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
-import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemCursorAdapter;
-import com.dontknowwhattocallthis.motivationaltasklist.model.TaskItemSQL;
-import com.dontknowwhattocallthis.motivationaltasklist.persistence.TaskDBHelper;
+import com.HCInfinity.tasks.model.TaskItemCursorAdapter;
+import com.HCInfinity.tasks.model.TaskItemSQL;
+import com.HCInfinity.tasks.persistence.TaskDBHelper;
 import com.woxthebox.draglistview.DragListView;
 
 import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity {
-    private ArrayList<TaskItem> taskData = new ArrayList<TaskItem>();
+    private ArrayList<TaskItem> taskData = new ArrayList<>();
     TaskDBHelper tDBHelper = new TaskDBHelper(this);
     private TaskItemCursorAdapter adapter;
     Context ctx = this;
