@@ -77,7 +77,7 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
 
         if (currTask.hasDate()) { //date, no time
             DateFormat dF = DateFormat.getDateInstance(DateFormat.LONG);
-
+            holder.dateText.setVisibility(View.VISIBLE);
             StringBuilder stringDate = new StringBuilder();
             stringDate.append(dF.format(currTask.getDueDate()));
             if(currTask.hasTime()){ //date and time
@@ -93,6 +93,7 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
         else { //task name only
             //newTask.put("date", "");
             holder.dateText.setText("");
+            holder.dateText.setVisibility(View.GONE);
         }
     }
 

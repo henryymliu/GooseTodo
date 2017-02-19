@@ -6,23 +6,28 @@
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
     android:background="@drawable/list_item_selector"
     >
 
 
 <CheckBox
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
+    android:paddingRight="10dp"
     android:id="@+id/taskCheckBox"
     android:onClick="onTaskChecked"
+    android:layout_centerVertical="true"
    />
 <TextView
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id = "@+id/task_item_task_desc"
     android:textAppearance="?android:textAppearanceMedium"
     android:text = "TEST"
-    android:layout_toRightOf="@id/taskCheckBox" />
+    android:layout_toRightOf="@id/taskCheckBox"
+    android:layout_alignTop="@id/taskCheckBox"/>
 
 <TextView
     android:layout_width="match_parent"
