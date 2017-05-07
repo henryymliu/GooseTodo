@@ -58,6 +58,8 @@ public class taskHandler {
         titleInput.setHint(ctx.getString(R.string.addTask_taskTextHint));
         //set view in dialog box
         getTaskTitleBuilder.setView(titleInput);
+
+        //create list
         getTaskTitleBuilder.setNeutralButton(ctx.getString(R.string.addTask_ADDDATE), new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int id){

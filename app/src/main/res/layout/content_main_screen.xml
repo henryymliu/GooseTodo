@@ -18,6 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id = "@+id/list_tasks"
-
+        android:paddingTop = "2dp"
+        android:paddingLeft = "4dp"
+        android:paddingRight="4dp"
+        android:clipToPadding="false"
         />
 </FrameLayout>

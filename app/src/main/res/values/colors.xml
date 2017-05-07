@@ -6,4 +6,9 @@
     <color name="colorAccentDark">#a83816</color>
     <color name="list_item_background">#AACCCCCC</color>
     <color name="app_color">#8EAE3C</color>
+
+    <color name = "priority_high">#ef0d09</color>
+    <color name="priority_medium">#f77809</color>
+    <color name="priority_low">#0ccfd6</color>
+
 </resources>

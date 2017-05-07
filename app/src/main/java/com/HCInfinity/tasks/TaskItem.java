@@ -9,6 +9,7 @@ import com.HCInfinity.tasks.model.TaskItemSQL;
 import com.HCInfinity.tasks.persistence.TaskDBHelper;
 import com.HCInfinity.tasks.persistence.TaskDBSchema;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class TaskItem {
     private Date dueDate = Calendar.getInstance().getTime();
     private boolean useDate;
     private boolean useTime;
+    private TaskPriority prio = TaskPriority.HIGH;
     private boolean isOverdue = false;
 
     public static final long TASK_ID_NOT_SET = -1;
@@ -30,7 +32,12 @@ public class TaskItem {
     private long id = TASK_ID_NOT_SET;
     private long order = TASK_ORDER_NOT_SET;
 
-
+    public enum TaskPriority{
+        NONE,
+        LOW,
+        MEDIUM,
+        HIGH
+    }
 
     public TaskItem(){}
 
@@ -65,6 +72,24 @@ public class TaskItem {
     public Date getDueDate(){
         return this.dueDate;
     }
+
+    public String dueDateToString(){
+        if (this.useDate) { //date, no time
+            DateFormat dF = DateFormat.getDateInstance(DateFormat.LONG);
+            StringBuilder stringDate = new StringBuilder();
+            stringDate.append(dF.format(this.dueDate));
+            if(this.hasTime()){ //date and time
+                DateFormat tF = DateFormat.getTimeInstance(DateFormat.SHORT);
+                stringDate.append(", ").append(tF.format(this.getDueDate())); //maybe adjust this
+            }
+            return (stringDate.toString());
+        }
+
+        else { //task name only
+            //newTask.put("date", "");
+          return "";
+        }
+    }
     public boolean  hasDate(){return this.useDate;}
     public boolean hasTime(){return this.useTime;}
     public boolean isOverdue(){return this.isOverdue;}
@@ -80,7 +105,8 @@ public class TaskItem {
     public void setUseTime(boolean t){
         this.useTime =t;
     }
-
+    public void setPriority(String p){this.prio = TaskPriority.valueOf(p);}
+    public TaskPriority getPriority(){return this.prio;}
     public long getID() {
         return id;
     }
@@ -95,7 +121,7 @@ public class TaskItem {
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP, this.dueDate.getTime());
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME, this.useTime);
         values.put(TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE, this.useDate);
-
+        values.put(TaskDBSchema.TaskTable.COLUMN_NAME_PRIORITY,this.getPriority().name());
         return values;
     }
 

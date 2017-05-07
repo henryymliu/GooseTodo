@@ -17,6 +17,7 @@ public final class TaskDBSchema {
         public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
         public static final String COLUMN_NAME_USE_DATE = "usedate";
         public static final String COLUMN_NAME_USE_TIME = "usetime";
+        public static final String COLUMN_NAME_PRIORITY = "prio";
     }
 
 }

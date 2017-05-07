@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TaskDBHelper extends SQLiteOpenHelper{
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "Task.db";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE IF NOT EXISTS " + TaskDBSchema.TaskTable.TABLE_NAME + " (" +
@@ -20,7 +20,8 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                     TaskDBSchema.TaskTable.COLUMN_NAME_TITLE + " TEXT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP + " BIGINT," +
                     TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE + " BIT," +
-                    TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME + " BIT" + ")";
+                    TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME + " BIT," +
+                    TaskDBSchema.TaskTable.COLUMN_NAME_PRIORITY + " TEXT" + ")";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskDBSchema.TaskTable.TABLE_NAME;

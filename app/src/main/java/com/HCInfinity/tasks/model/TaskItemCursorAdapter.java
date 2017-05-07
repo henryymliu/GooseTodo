@@ -2,6 +2,7 @@ package com.HCInfinity.tasks.model;
 
 import android.database.Cursor;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,8 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
 
         holder.itemView.setTag(currTask.getID());
 
+
+
         if (currTask.hasDate()) { //date, no time
             DateFormat dF = DateFormat.getDateInstance(DateFormat.LONG);
             holder.dateText.setVisibility(View.VISIBLE);
@@ -95,6 +98,22 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
             holder.dateText.setText("");
             holder.dateText.setVisibility(View.GONE);
         }
+
+        //set priority
+        holder.prioBar.setVisibility(View.VISIBLE);
+        switch(currTask.getPriority()) {
+            case HIGH:
+                holder.prioBar.setBackgroundColor(Color.RED);
+                break;
+            case MEDIUM:
+                holder.prioBar.setBackgroundColor(Color.YELLOW);
+                break;
+            case LOW:
+                holder.prioBar.setBackgroundColor(Color.CYAN);
+                break;
+            default:
+                holder.prioBar.setBackgroundColor(Color.TRANSPARENT);
+        }
     }
 
     @Override
@@ -105,11 +124,13 @@ public class TaskItemCursorAdapter extends DragItemAdapter<TaskItem, TaskItemCur
     public class ViewHolder extends DragItemAdapter.ViewHolder {
         public TextView mText;
         public TextView dateText;
+        public View prioBar;
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
             mText = (TextView) itemView.findViewById(R.id.task_item_task_desc);
             dateText = (TextView) itemView.findViewById(R.id.task_item_task_date);
+            prioBar = itemView.findViewById(R.id.priorityBar);
         }
 
         @Override

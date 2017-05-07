@@ -27,7 +27,8 @@ public class TaskItemSQL {
             TaskDBSchema.TaskTable.COLUMN_NAME_TITLE,
             TaskDBSchema.TaskTable.COLUMN_NAME_TIMESTAMP,
             TaskDBSchema.TaskTable.COLUMN_NAME_USE_DATE,
-            TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME
+            TaskDBSchema.TaskTable.COLUMN_NAME_USE_TIME,
+            TaskDBSchema.TaskTable.COLUMN_NAME_PRIORITY
     };
 
     public static Cursor getAllTaskItems(TaskDBHelper dbhelper) {
